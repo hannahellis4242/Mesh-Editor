@@ -1,3 +1,5 @@
+import Vector from "../mesh/Vector";
+
 type matrix3 = [
   number,
   number,
@@ -45,15 +47,16 @@ export const multiply = (a: matrix3, b: matrix3): matrix3 => {
   ];
 };
 
-export const det = (x: matrix3) => {
-  const a = x[0 * 3 + 0];
-  const b = x[0 * 3 + 1];
-  const c = x[0 * 3 + 2];
-  const d = x[1 * 3 + 0];
-  const e = x[1 * 3 + 1];
-  const f = x[1 * 3 + 2];
-  const g = x[2 * 3 + 0];
-  const h = x[2 * 3 + 1];
-  const i = x[2 * 3 + 2];
+export const det = ([a, b, c, d, e, f, g, h, i]: matrix3) => {
   return a * e * i + b * f * g + c * d * h - c * e * g - b * d * i - a * f * h;
 };
+
+export const multiplyVec =
+  ([a, b, c, d, e, f, g, h, i]: matrix3) =>
+  ({ x, y, z }: Vector): Vector => {
+    return {
+      x: a * x + b * y + c * z,
+      y: d * x + e * y + f * z,
+      z: g * x + h * y + i * z,
+    };
+  };
