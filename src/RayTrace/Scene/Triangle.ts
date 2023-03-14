@@ -27,13 +27,49 @@ export default class Triangle {
       this.p01.y,
       this.p02.y,
       -lab.z,
-      this.p01.x,
+      this.p01.z,
       this.p02.z,
     ];
-    if (det(m) === 0) {
+    const detM = det(m);
+    if (detM === 0) {
       return false;
     }
-    //TODO do more here
-    return false;
+    const b = subtract(l.source,this.points[0]);
+    const Mu:matrx3d:[
+      -lab.x,
+      this.p01.x,
+      this.p02.x,
+      b.x,
+      b.y,
+      b.z,
+      -lab.z,
+      this.p01.z,
+      this.p02.z,
+    ];
+    const u = det(Mu)/detM;
+    if(u < 0 || u > 1){
+      return false;
+    }
+    
+    const Mv:matrx3d:[
+      -lab.x,
+      this.p01.x,
+      this.p02.x,
+      -lab.y,
+      this.p01.y,
+      this.p02.y,
+      b.x,
+      b.y,
+      b.z,
+    ];
+    const v = det(Mv)/detM;
+    if(v < 0 || v > 1){
+      return false;
+    }
+    if(u+v > 1)
+    {
+      return false;
+    }
+    return true;
   }
 }
