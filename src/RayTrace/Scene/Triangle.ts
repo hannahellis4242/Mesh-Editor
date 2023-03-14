@@ -44,4 +44,12 @@ export default class Triangle {
     const t = dot(this.normal,b)/det;
     return {t,u,v};
   }
+  point(u:number,v:number):Vector|undefined{
+    if(u<0 || v<0 || u+v>1){
+      return undefined;
+    }
+    const a = scale(u,this.p01);
+    const b = scale(v,this.p02);
+    return add(this.points[0],add(a,b));
+  }
 }
