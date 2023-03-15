@@ -42,9 +42,16 @@ describe("Triangle", () => {
       const p2 = new SceneCoord(-4, -4, 3);
       const tri = new Triangle([p0, p1, p2]);
 
-      const result = tri.intersects(ray);
-      console.log(result);
-      expect(result).toBeDefined();
+      it("should give an intersection point (-2.13067,-3.608,3.86933)", () => {
+        const result = tri.intersects(ray);
+        expect(result).toBeDefined();
+        if (result) {
+          const { x, y, z } = ray.point(result.t);
+          expect(x).toBeCloseTo(-2.13067, 5);
+          expect(y).toBeCloseTo(-3.608, 5);
+          expect(z).toBeCloseTo(3.86933, 5);
+        }
+      });
     });
   });
 });

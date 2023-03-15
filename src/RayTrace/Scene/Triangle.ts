@@ -36,7 +36,7 @@ export default class Triangle {
     if (u < 0 || u > 1) {
       return undefined;
     }
-    const v = dot(cross(lab, this.p02), b) / det;
+    const v = dot(cross(lab, this.p01), b) / det;
     if (v < 0 || v > 1) {
       return undefined;
     }
