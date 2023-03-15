@@ -1,4 +1,4 @@
-import Vector from "../mesh/Vector";
+import Vector, { cross, dot, scale } from "../mesh/Vector";
 
 type matrix3 = [
   number,
@@ -47,8 +47,33 @@ export const multiply = (a: matrix3, b: matrix3): matrix3 => {
   ];
 };
 
-export const det = ([a, b, c, d, e, f, g, h, i]: matrix3) => {
-  return a * e * i + b * f * g + c * d * h - c * e * g - b * d * i - a * f * h;
+export const determinant = ([a, b, c, d, e, f, g, h, i]: matrix3): number => {
+  const col0 = { x: a, y: d, z: g };
+  const col1 = { x: b, y: e, z: h };
+  const col2 = { x: c, y: f, z: i };
+  const det = dot(col0, cross(col1, col2));
+};
+
+export const inverse = ([a, b, c, d, e, f, g, h, i]: matrix3): matrix3 => {
+  const col0 = { x: a, y: d, z: g };
+  const col1 = { x: b, y: e, z: h };
+  const col2 = { x: c, y: f, z: i };
+  const det = dot(col0, cross(col1, col2));
+  const s = scale(1 / det);
+  const row0 = s(cross(col1, col2));
+  const row1 = s(cross(col2, col0));
+  const row2 = s(cross(col0, col1));
+  return [
+    row0.x,
+    row0.y,
+    row0.z,
+    row1.x,
+    row1.y,
+    row1.z,
+    row2.x,
+    row2.y,
+    row2.z,
+  ];
 };
 
 export const multiplyVec =
