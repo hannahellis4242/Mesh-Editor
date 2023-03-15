@@ -17,7 +17,7 @@ export interface IntersectionParams {
 export default class Triangle {
   private readonly p01: Vector;
   private readonly p02: Vector;
-  private readonly normal: Vector;
+  public readonly normal: Vector;
   public readonly unitNormal: Vector;
   constructor(public readonly points: [Vector, Vector, Vector]) {
     this.p01 = subtract(this.points[1], this.points[0]);
