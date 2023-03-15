@@ -43,10 +43,10 @@ describe("Triangle", () => {
       const tri = new Triangle([p0, p1, p2]);
 
       it("should give an intersection point (-2.13067,-3.608,3.86933)", () => {
-        const result = tri.intersects(ray);
-        expect(result).toBeDefined();
-        if (result) {
-          const { x, y, z } = result.point;
+        const result = tri.intersections(ray);
+        expect(result).toHaveLength(1);
+        if (result[0]) {
+          const { x, y, z } = result[0].point;
           expect(x).toBeCloseTo(-2.13067, 5);
           expect(y).toBeCloseTo(-3.608, 5);
           expect(z).toBeCloseTo(3.86933, 5);

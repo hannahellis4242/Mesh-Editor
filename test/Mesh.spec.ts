@@ -23,12 +23,5 @@ describe("Mesh", () => {
       const allIntersections = mesh.intersections(ray);
       expect(allIntersections).toHaveLength(2);
     });
-    it("should have a closest intersection", () => {
-      const closest = mesh.closestIntersect(ray);
-      expect(closest).toBeDefined();
-      if (closest) {
-        expect(closest.distance).toBeCloseTo(2.726146, 5);
-      }
-    });
   });
 });

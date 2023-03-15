@@ -1,5 +1,6 @@
-import Vector from "./Vector";
+import Intersection from "./Intersection";
+import Ray from "./Ray";
 
 export default interface Shape {
-  getNormalAt(point: Vector): Vector | undefined;
+  intersections(ray: Ray): Intersection[];
 }

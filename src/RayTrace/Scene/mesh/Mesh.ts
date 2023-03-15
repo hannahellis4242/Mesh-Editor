@@ -1,11 +1,11 @@
 import { v4 } from "uuid";
 import Intersection from "../Intersection";
 import Ray from "../Ray";
-import Triangle from "./Triangle";
 import Surface from "./Surface";
 import Vertex from "./Vertex";
+import Shape from "../Shape";
 
-export default class Mesh {
+export default class Mesh implements Shape {
   vertices: Vertex[];
   surfaces: Surface[];
   constructor() {
@@ -45,14 +45,6 @@ export default class Mesh {
     return tag;
   }
   intersections(ray: Ray): Intersection[] {
-    return this.surfaces
-      .map((tri) => tri.intersects(ray))
-      .filter((x) => !!x)
-      .map((x) => x!);
-  }
-  closestIntersect(ray: Ray): Intersection | undefined {
-    return this.intersections(ray).reduce((prev, cur) =>
-      prev.distance < cur.distance ? prev : cur
-    );
+    return this.surfaces.flatMap((tri) => tri.intersections(ray));
   }
 }

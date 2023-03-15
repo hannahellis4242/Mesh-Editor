@@ -14,30 +14,27 @@ export default class Triangle implements Shape {
     this.normal = cross(this.p01, this.p02);
     this.unitNormal = unit(this.normal);
   }
-  getNormalAt(_: Vector): Vector | undefined {
-    return this.unitNormal;
-  }
-  intersects(l: Ray): Intersection | undefined {
+  intersections(l: Ray): Intersection[] {
     const lab = scale(-1)(l.direction());
     const det = dot(lab, this.normal);
     if (det === 0) {
-      return undefined;
+      return [];
     }
     const b = subtract(l.source, this.points[0]);
     const u = dot(cross(this.p02, lab), b) / det;
     if (u < 0 || u > 1) {
-      return undefined;
+      return [];
     }
     const v = dot(cross(lab, this.p01), b) / det;
     if (v < 0 || v > 1) {
-      return undefined;
+      return [];
     }
     if (u + v > 1) {
-      return undefined;
+      return [];
     }
     const t = dot(this.normal, b) / det;
     const point = l.point(t);
-    return { ray: l, shape: this, point, distance: t };
+    return [{ ray: l, shape: this, point, distance: t }];
   }
   point(u: number, v: number): Vector | undefined {
     if (u < 0 || v < 0 || u + v > 1) {
