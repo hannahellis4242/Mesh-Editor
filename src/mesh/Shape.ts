@@ -1,22 +1,17 @@
 import { v4 } from "uuid";
-import Edge from "./Edge";
-import Surface, { createSurface } from "./Surface";
+import Ray from "../RayTrace/Scene/Ray";
+import Surface from "./Surface";
 import Vertex from "./Vertex";
 
 export default class Shape {
   vertices: Vertex[];
-  edges: Edge[];
   surfaces: Surface[];
   constructor() {
     this.vertices = [];
-    this.edges = [];
     this.surfaces = [];
   }
   findVertexByTag(target: string) {
     return this.vertices.find(({ tag }) => target === tag);
-  }
-  findEdgeByTag(target: string) {
-    return this.edges.find(({ tag }) => target === tag);
   }
   addVertex(x: number, y: number, z: number): string {
     const found = this.vertices.find(
@@ -29,57 +24,34 @@ export default class Shape {
     this.vertices.push(new Vertex(x, y, z, tag));
     return tag;
   }
-  addEdge(sourceTag: string, targetTag: string) {
-    const source = this.findVertexByTag(sourceTag);
-    if (!source) {
+  addTrangle([p1, p2, p3]: [string, string, string]) {
+    const v1 = this.findVertexByTag(p1);
+    if (!v1) {
       return;
     }
-    const target = this.findVertexByTag(targetTag);
-    if (!target) {
+    const v2 = this.findVertexByTag(p2);
+    if (!v2) {
       return;
     }
-    const tag = v4();
-    this.edges.push(new Edge(source, target, tag));
-    return tag;
-  }
-  addSurface([e1, e2, e3]: [string, string, string]) {
-    const edge1 = this.findEdgeByTag(e1);
-    if (!edge1) {
-      return;
-    }
-    const edge2 = this.findEdgeByTag(e2);
-    if (!edge2) {
-      return;
-    }
-    const edge3 = this.findEdgeByTag(e3);
-    if (!edge3) {
+    const v3 = this.findVertexByTag(p3);
+    if (!v3) {
       return;
     }
     const tag = v4();
-    const surface = createSurface([edge1, edge2, edge3], tag);
-    if (!surface) {
-      return;
-    }
+    const surface = new Surface([v1, v2, v3], tag);
     this.surfaces.push(surface);
     return tag;
   }
+  closestIntersect(ray: Ray): number | undefined {
+    const intersections = this.surfaces
+      .map((tri) => tri.intersects(ray))
+      .filter((x) => !!x)
+      .map((x) => x!)
+      .map(({ t }) => t)
+      .filter((t) => t > 1);
+    if (intersections.length === 0) {
+      return undefined;
+    }
+    return Math.min(...intersections);
+  }
 }
-
-export const createPoints = (shape: Shape) => {
-  return shape.surfaces
-    .flatMap(({ edges }) => {
-      const [e1, e2] = edges;
-      return [e1.source, e1.target, e2.target];
-    })
-    .flatMap(({ x, y, z }) => [x, y, z]);
-};
-
-export const drawShape = (context: WebGLRenderingContext) => (shape: Shape) => {
-  const points = createPoints(shape);
-  context.bufferData(
-    context.ARRAY_BUFFER,
-    new Float32Array(points),
-    context.STATIC_DRAW
-  );
-  context.drawArrays(context.TRIANGLES, 0, points.length / 3);
-};
