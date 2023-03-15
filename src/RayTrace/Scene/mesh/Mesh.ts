@@ -44,12 +44,14 @@ export default class Mesh {
     this.surfaces.push(surface);
     return tag;
   }
-  closestIntersect(ray: Ray): Intersection | undefined {
-    const intersections = this.surfaces
+  intersections(ray: Ray): Intersection[] {
+    return this.surfaces
       .map((tri) => tri.intersects(ray))
       .filter((x) => !!x)
       .map((x) => x!);
-    return intersections.reduce((prev, cur) =>
+  }
+  closestIntersect(ray: Ray): Intersection | undefined {
+    return this.intersections(ray).reduce((prev, cur) =>
       prev.distance < cur.distance ? prev : cur
     );
   }
