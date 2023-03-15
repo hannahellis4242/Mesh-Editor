@@ -1,5 +1,7 @@
 import Vector, {
   add,
+  cross,
+  dot,
   negate,
   scale,
   subtract,
@@ -52,6 +54,24 @@ describe("Vector", () => {
       expect(x).toBe(25);
       expect(y).toBe(-5);
       expect(z).toBe(10);
+    });
+  });
+  describe("dot", () => {
+    const a = { x: 1, y: 2, z: 3 };
+    const b = { x: -1, y: 4, z: 1 };
+    it("should give 10", () => {
+      const result = dot(a, b);
+      expect(result).toBe(10);
+    });
+  });
+  describe("cross", () => {
+    const a = { x: 1, y: 2, z: 3 };
+    const b = { x: -1, y: 4, z: 1 };
+    it("should give (-10,-4,6)", () => {
+      const { x, y, z } = cross(a, b);
+      expect(x).toBe(-10);
+      expect(y).toBe(-4);
+      expect(z).toBe(6);
     });
   });
 });
