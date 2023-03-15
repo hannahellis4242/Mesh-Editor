@@ -23,7 +23,7 @@ const load = () => {
     return;
   }
 
-  const mesh = new Mesh();
+  const mesh = new Mesh(new Colour(256, 0, 0));
   {
     const p1 = mesh.addVertex(300, 500, 6);
     const p2 = mesh.addVertex(800, 600, 7);
