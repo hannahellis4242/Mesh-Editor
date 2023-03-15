@@ -1,6 +1,8 @@
 import CanvasParams from "./RayTrace/Canvas/CanvasParams";
 import RayTrace from "./RayTrace/RayTrace";
 import Mesh from "./RayTrace/Scene/mesh/Mesh";
+import Triangle from "./RayTrace/Scene/mesh/Triangle";
+import Vertex from "./RayTrace/Scene/mesh/Vertex";
 import Scene from "./RayTrace/Scene/Scene";
 
 const load = () => {
@@ -11,6 +13,8 @@ const load = () => {
     return;
   }
   const context = htmlCanvas.getContext("2d");
+  htmlCanvas.width = window.innerWidth;
+  htmlCanvas.height = window.innerHeight;
   if (!context) {
     alert(
       "Unable to initialize WebGL. Your browser or machine may not support it."
@@ -20,10 +24,10 @@ const load = () => {
 
   const mesh = new Mesh();
   {
-    const p1 = mesh.addVertex(3, 5, 6);
-    const p2 = mesh.addVertex(8, 6, 7);
-    const p3 = mesh.addVertex(11, 10, 5);
-    const p4 = mesh.addVertex(4, 10, 6);
+    const p1 = mesh.addVertex(300, 500, 6);
+    const p2 = mesh.addVertex(800, 600, 7);
+    const p3 = mesh.addVertex(1100, 1000, 5);
+    const p4 = mesh.addVertex(400, 1000, 6);
 
     const face1 = mesh.addTrangle([p1, p2, p4]);
     const face2 = mesh.addTrangle([p3, p4, p2]);
@@ -31,8 +35,10 @@ const load = () => {
     const face4 = mesh.addTrangle([p1, p3, p2]);
   }
   const scene = new Scene({ r: 0, g: 0, b: 0 });
-  const canvas = new CanvasParams(htmlCanvas.width, htmlCanvas.height, 2);
+  scene.addShape(mesh);
+  const canvas = new CanvasParams(htmlCanvas.width, htmlCanvas.height, 1);
   const image = new RayTrace(canvas, scene).createImage(context);
+  console.log(canvas);
   context.putImageData(image, 0, 0);
 };
 
