@@ -4,11 +4,12 @@ import Ray from "../Ray";
 import Surface from "./Surface";
 import Vertex from "./Vertex";
 import Shape from "../Shape";
+import Colour from "../Colour";
 
 export default class Mesh implements Shape {
   vertices: Vertex[];
   surfaces: Surface[];
-  constructor() {
+  constructor(private readonly colour: Colour) {
     this.vertices = [];
     this.surfaces = [];
   }
@@ -26,7 +27,7 @@ export default class Mesh implements Shape {
     this.vertices.push(new Vertex(x, y, z, tag));
     return tag;
   }
-  addTrangle([p1, p2, p3]: [string, string, string]) {
+  addTrangle([p1, p2, p3]: [string, string, string], colour?: Colour) {
     const v1 = this.findVertexByTag(p1);
     if (!v1) {
       return;
@@ -40,7 +41,7 @@ export default class Mesh implements Shape {
       return;
     }
     const tag = v4();
-    const surface = new Surface([v1, v2, v3], tag);
+    const surface = new Surface([v1, v2, v3], tag, colour || this.colour);
     this.surfaces.push(surface);
     return tag;
   }

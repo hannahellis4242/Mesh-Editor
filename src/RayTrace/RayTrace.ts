@@ -1,23 +1,21 @@
+import CanvasCoord from "./Canvas/CanvasCoord";
 import CanvasParams from "./Canvas/CanvasParams";
 import canvasCoordsToSceneCoords from "./canvasCoordsToSceneCoords";
+import Colour from "./Scene/Colour";
 import Ray from "./Scene/Ray";
 import Scene from "./Scene/Scene";
 import { zeroVec } from "./Scene/Vector";
 
 const setPixel = (
   image: ImageData,
-  x: number,
-  y: number,
-  r: number,
-  g: number,
-  b: number,
-  a: number
+  { x, y }: CanvasCoord,
+  { red, green, blue, alpha }: Colour
 ) => {
   const index = (x + y * image.width) * 4;
-  image.data[index + 0] = r;
-  image.data[index + 1] = g;
-  image.data[index + 2] = b;
-  image.data[index + 3] = a;
+  image.data[index + 0] = red;
+  image.data[index + 1] = green;
+  image.data[index + 2] = blue;
+  image.data[index + 3] = alpha;
 };
 
 export default class RayTrace {
@@ -40,9 +38,9 @@ export default class RayTrace {
         const intersections = this.scene.intersections(ray);
         //console.log(intersections);
         if (intersections.length > 0) {
-          setPixel(image, x, y, 256, 0, 0, 256);
+          setPixel(image, { x, y }, new Colour(256, 0, 0));
         } else {
-          setPixel(image, x, y, 0, 0, 0, 256);
+          setPixel(image, { x, y }, this.scene.backround);
         }
       }
     }

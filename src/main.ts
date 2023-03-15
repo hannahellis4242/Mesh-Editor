@@ -1,5 +1,6 @@
 import CanvasParams from "./RayTrace/Canvas/CanvasParams";
 import RayTrace from "./RayTrace/RayTrace";
+import Colour from "./RayTrace/Scene/Colour";
 import Mesh from "./RayTrace/Scene/mesh/Mesh";
 import Triangle from "./RayTrace/Scene/mesh/Triangle";
 import Vertex from "./RayTrace/Scene/mesh/Vertex";
@@ -34,7 +35,7 @@ const load = () => {
     const face3 = mesh.addTrangle([p1, p4, p3]);
     const face4 = mesh.addTrangle([p1, p3, p2]);
   }
-  const scene = new Scene({ r: 0, g: 0, b: 0 });
+  const scene = new Scene(new Colour(0, 0, 0));
   scene.addShape(mesh);
   const canvas = new CanvasParams(htmlCanvas.width, htmlCanvas.height, 1);
   const image = new RayTrace(canvas, scene).createImage(context);

@@ -1,8 +1,9 @@
+import Colour from "../src/RayTrace/Scene/Colour";
 import Mesh from "../src/RayTrace/Scene/mesh/Mesh";
 import Ray from "../src/RayTrace/Scene/Ray";
 import { zeroVec } from "../src/RayTrace/Scene/Vector";
 describe("Mesh", () => {
-  const mesh = new Mesh();
+  const mesh = new Mesh(new Colour(256, 0, 0));
   const p1 = mesh.addVertex(3, 5, 6);
   const p2 = mesh.addVertex(8, 6, 7);
   const p3 = mesh.addVertex(11, 10, 5);
