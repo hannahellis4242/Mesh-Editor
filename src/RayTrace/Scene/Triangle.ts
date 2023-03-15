@@ -17,7 +17,7 @@ export interface IntersectionParams {
 export default class Triangle {
   private readonly p01: Vector;
   private readonly p02: Vector;
-  private readonly normal: Vector;
+  public readonly normal: Vector;
   public readonly unitNormal: Vector;
   constructor(public readonly points: [Vector, Vector, Vector]) {
     this.p01 = subtract(this.points[1], this.points[0]);
@@ -36,7 +36,7 @@ export default class Triangle {
     if (u < 0 || u > 1) {
       return undefined;
     }
-    const v = dot(cross(lab, this.p02), b) / det;
+    const v = dot(cross(lab, this.p01), b) / det;
     if (v < 0 || v > 1) {
       return undefined;
     }
