@@ -6,7 +6,7 @@ import Vector, {
   scale,
   subtract,
   zeroVec,
-} from "../src/mesh/Vector";
+} from "../src/RayTrace/Scene/Vector";
 
 describe("Vector", () => {
   describe("when zero vector", () => {

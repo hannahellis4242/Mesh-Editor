@@ -1,20 +1,9 @@
-import Vector, {
-  cross,
-  subtract,
-  unit,
-  scale,
-  dot,
-  add,
-} from "../../mesh/Vector";
-import Ray from "./Ray";
+import Vector, { cross, subtract, unit, scale, dot, add } from "../Vector";
+import Ray from "../Ray";
+import Intersection from "../Intersection";
+import Shape from "../Shape";
 
-export interface IntersectionParams {
-  t: number;
-  u: number;
-  v: number;
-}
-
-export default class Triangle {
+export default class Triangle implements Shape {
   private readonly p01: Vector;
   private readonly p02: Vector;
   public readonly normal: Vector;
@@ -25,26 +14,27 @@ export default class Triangle {
     this.normal = cross(this.p01, this.p02);
     this.unitNormal = unit(this.normal);
   }
-  intersects(l: Ray): IntersectionParams | undefined {
+  intersections(l: Ray): Intersection[] {
     const lab = scale(-1)(l.direction());
     const det = dot(lab, this.normal);
     if (det === 0) {
-      return undefined;
+      return [];
     }
     const b = subtract(l.source, this.points[0]);
     const u = dot(cross(this.p02, lab), b) / det;
     if (u < 0 || u > 1) {
-      return undefined;
+      return [];
     }
     const v = dot(cross(lab, this.p01), b) / det;
     if (v < 0 || v > 1) {
-      return undefined;
+      return [];
     }
     if (u + v > 1) {
-      return undefined;
+      return [];
     }
     const t = dot(this.normal, b) / det;
-    return { t, u, v };
+    const point = l.point(t);
+    return [{ ray: l, shape: this, point, distance: t }];
   }
   point(u: number, v: number): Vector | undefined {
     if (u < 0 || v < 0 || u + v > 1) {

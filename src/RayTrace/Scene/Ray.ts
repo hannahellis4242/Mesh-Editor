@@ -1,4 +1,4 @@
-import Vector, { add, scale, subtract } from "../../mesh/Vector";
+import Vector, { add, scale, subtract } from "./Vector";
 
 export default class Ray {
   constructor(public readonly source: Vector, public readonly target: Vector) {}
