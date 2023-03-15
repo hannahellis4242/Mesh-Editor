@@ -1,4 +1,4 @@
-import Triangle from "../RayTrace/Scene/Triangle";
+import Triangle from "./Triangle";
 import Vertex from "./Vertex";
 
 export default class Surface extends Triangle {

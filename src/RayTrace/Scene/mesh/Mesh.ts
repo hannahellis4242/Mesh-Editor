@@ -1,9 +1,11 @@
 import { v4 } from "uuid";
-import Ray from "../RayTrace/Scene/Ray";
+import Intersection from "../Intersection";
+import Ray from "../Ray";
+import Triangle from "./Triangle";
 import Surface from "./Surface";
 import Vertex from "./Vertex";
 
-export default class Shape {
+export default class Mesh {
   vertices: Vertex[];
   surfaces: Surface[];
   constructor() {
@@ -42,16 +44,13 @@ export default class Shape {
     this.surfaces.push(surface);
     return tag;
   }
-  closestIntersect(ray: Ray): number | undefined {
+  closestIntersect(ray: Ray): Intersection | undefined {
     const intersections = this.surfaces
       .map((tri) => tri.intersects(ray))
       .filter((x) => !!x)
-      .map((x) => x!)
-      .map(({ t }) => t)
-      .filter((t) => t > 1);
-    if (intersections.length === 0) {
-      return undefined;
-    }
-    return Math.min(...intersections);
+      .map((x) => x!);
+    return intersections.reduce((prev, cur) =>
+      prev.distance < cur.distance ? prev : cur
+    );
   }
 }

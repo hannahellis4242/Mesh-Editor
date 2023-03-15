@@ -1,4 +1,4 @@
-import Vector from "../../mesh/Vector";
+import Vector from "./Vector";
 
 export default class SceneCoord implements Vector {
   constructor(

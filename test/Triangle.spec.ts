@@ -1,6 +1,6 @@
 import Ray from "../src/RayTrace/Scene/Ray";
 import SceneCoord from "../src/RayTrace/Scene/SceneCoord";
-import Triangle from "../src/RayTrace/Scene/Triangle";
+import Triangle from "../src/RayTrace/Scene/mesh/Triangle";
 
 describe("Triangle", () => {
   describe("when given three points", () => {
@@ -46,7 +46,7 @@ describe("Triangle", () => {
         const result = tri.intersects(ray);
         expect(result).toBeDefined();
         if (result) {
-          const { x, y, z } = ray.point(result.t);
+          const { x, y, z } = result.point;
           expect(x).toBeCloseTo(-2.13067, 5);
           expect(y).toBeCloseTo(-3.608, 5);
           expect(z).toBeCloseTo(3.86933, 5);
