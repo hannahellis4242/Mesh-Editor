@@ -11,12 +11,21 @@ export default class Triangle implements Shape {
   public readonly unitNormal: Vector;
   constructor(
     public readonly points: [Vector, Vector, Vector],
-    private readonly colour: Colour
+    public readonly colour: Colour
   ) {
     this.p01 = subtract(this.points[1], this.points[0]);
     this.p02 = subtract(this.points[2], this.points[0]);
     this.normal = cross(this.p01, this.p02);
     this.unitNormal = unit(this.normal);
+  }
+  translate(t: Vector): Shape {
+    const [p1, p2, p3] = this.points;
+    const newPoints: [Vector, Vector, Vector] = [
+      add(p1, t),
+      add(p2, t),
+      add(p3, t),
+    ];
+    return new Triangle(newPoints, this.colour);
   }
   intersections(l: Ray): Intersection[] {
     const lab = scale(-1)(l.direction());

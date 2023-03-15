@@ -8,6 +8,10 @@ export const zeroVec = () => {
   return { x: 0, y: 0, z: 0 };
 };
 
+export const vec = (x: number, y: number, z: number) => {
+  return { x, y, z };
+};
+
 export const add = (a: Vector, b: Vector): Vector => {
   return { x: a.x + b.x, y: a.y + b.y, z: a.z + b.z };
 };

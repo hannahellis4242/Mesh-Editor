@@ -5,6 +5,7 @@ import Surface from "./Surface";
 import Vertex from "./Vertex";
 import Shape from "../Shape";
 import Colour from "../Colour";
+import Vector, { add } from "../Vector";
 
 export default class Mesh implements Shape {
   vertices: Vertex[];
@@ -13,19 +14,27 @@ export default class Mesh implements Shape {
     this.vertices = [];
     this.surfaces = [];
   }
+  translate(t: Vector): Shape {
+    const newMesh = new Mesh(this.colour);
+    this.vertices.forEach((v) => newMesh.addVertex(add(t, v), v.tag));
+    this.surfaces.forEach((s) => {
+      newMesh.addTrangle(s.vertexTags, s.colour);
+    });
+    return newMesh;
+  }
   findVertexByTag(target: string) {
     return this.vertices.find(({ tag }) => target === tag);
   }
-  addVertex(x: number, y: number, z: number): string {
+  addVertex({ x, y, z }: Vector, tag?: string): string {
     const found = this.vertices.find(
       (vertex) => vertex.x === x && vertex.y === y && vertex.z === z
     );
     if (found) {
       return found.tag;
     }
-    const tag = v4();
-    this.vertices.push(new Vertex(x, y, z, tag));
-    return tag;
+    const tagToUse = tag || v4();
+    this.vertices.push(new Vertex(x, y, z, tagToUse));
+    return tagToUse;
   }
   addTrangle([p1, p2, p3]: [string, string, string], colour?: Colour) {
     const v1 = this.findVertexByTag(p1);
