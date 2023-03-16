@@ -1,5 +1,8 @@
-export default interface Colour {
-  r: number;
-  g: number;
-  b: number;
+export default class Colour {
+  constructor(
+    public readonly red: number,
+    public readonly green: number,
+    public readonly blue: number,
+    public readonly alpha: number = 256
+  ) {}
 }

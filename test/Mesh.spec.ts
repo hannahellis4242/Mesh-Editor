@@ -1,12 +1,13 @@
+import Colour from "../src/RayTrace/Scene/Colour";
 import Mesh from "../src/RayTrace/Scene/mesh/Mesh";
 import Ray from "../src/RayTrace/Scene/Ray";
-import { zeroVec } from "../src/RayTrace/Scene/Vector";
+import { vec, zeroVec } from "../src/RayTrace/Scene/Vector";
 describe("Mesh", () => {
-  const mesh = new Mesh();
-  const p1 = mesh.addVertex(3, 5, 6);
-  const p2 = mesh.addVertex(8, 6, 7);
-  const p3 = mesh.addVertex(11, 10, 5);
-  const p4 = mesh.addVertex(4, 10, 6);
+  const mesh = new Mesh(new Colour(256, 0, 0));
+  const p1 = mesh.addVertex(vec(3, 5, 6));
+  const p2 = mesh.addVertex(vec(8, 6, 7));
+  const p3 = mesh.addVertex(vec(11, 10, 5));
+  const p4 = mesh.addVertex(vec(4, 10, 6));
 
   const face1 = mesh.addTrangle([p1, p2, p4]);
   const face2 = mesh.addTrangle([p3, p4, p2]);

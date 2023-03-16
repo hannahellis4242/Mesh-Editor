@@ -1,13 +1,15 @@
 import Ray from "../src/RayTrace/Scene/Ray";
 import SceneCoord from "../src/RayTrace/Scene/SceneCoord";
 import Triangle from "../src/RayTrace/Scene/mesh/Triangle";
+import Colour from "../src/RayTrace/Scene/Colour";
 
 describe("Triangle", () => {
+  const colour = new Colour(0, 0, 0);
   describe("when given three points", () => {
     const p1 = new SceneCoord(2, 1, 1);
     const p2 = new SceneCoord(2, 2.5, 1);
     const p3 = new SceneCoord(1, 1.5, 0);
-    const triangle = new Triangle([p1, p2, p3]);
+    const triangle = new Triangle([p1, p2, p3], colour);
     describe("when getting the normal", () => {
       const { normal } = triangle;
       it("should give (-1.5,0,1.5)", () => {
@@ -21,7 +23,7 @@ describe("Triangle", () => {
     const p1 = new SceneCoord(2, 2, 0);
     const p2 = new SceneCoord(2, 1, 1);
     const p3 = new SceneCoord(0, 0.5, 1.5);
-    const triangle = new Triangle([p1, p2, p3]);
+    const triangle = new Triangle([p1, p2, p3], colour);
     describe("when getting the unit normal", () => {
       const { unitNormal } = triangle;
       it("should give (0,-0.70711,-0.70711)", () => {
@@ -40,7 +42,7 @@ describe("Triangle", () => {
       const p0 = new SceneCoord(2.5, 1.5, 2);
       const p1 = new SceneCoord(2, -4.5, 7.5);
       const p2 = new SceneCoord(-4, -4, 3);
-      const tri = new Triangle([p0, p1, p2]);
+      const tri = new Triangle([p0, p1, p2], colour);
 
       it("should give an intersection point (-2.13067,-3.608,3.86933)", () => {
         const result = tri.intersections(ray);
