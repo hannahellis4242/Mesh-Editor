@@ -3,7 +3,7 @@ import render from "./RayTrace/render";
 import Colour from "./RayTrace/Scene/Colour";
 import Mesh from "./RayTrace/Scene/mesh/Mesh";
 import Scene from "./RayTrace/Scene/Scene";
-import { vec } from "./RayTrace/Scene/Vector";
+import { subtract, transform, vec } from "./RayTrace/Scene/Vector";
 
 const paint = (
   context: CanvasRenderingContext2D,
@@ -12,29 +12,40 @@ const paint = (
   tz: number,
   rx: number,
   ry: number,
-  rz: number
+  rz: number,
+  d: number
 ) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   const mesh = new Mesh(new Colour(256, 0, 0));
   {
-    const p1 = mesh.addVertex(vec(300, 500, 6));
-    const p2 = mesh.addVertex(vec(800, 600, 7));
-    const p3 = mesh.addVertex(vec(1100, 1000, 5));
-    const p4 = mesh.addVertex(vec(400, 1000, 6));
+    const p1 = mesh.addVertex(vec(300, 500, 60));
+    const p2 = mesh.addVertex(vec(800, 600, 70));
+    const p3 = mesh.addVertex(vec(1100, 1000, 50));
+    const p4 = mesh.addVertex(vec(400, 1000, 60));
 
-    const face1 = mesh.addTrangle([p1, p2, p4], new Colour(0, 255, 0));
-    const face2 = mesh.addTrangle([p3, p4, p2], new Colour(0, 0, 255));
-    const face3 = mesh.addTrangle([p1, p4, p3], new Colour(255, 255, 0));
-    const face4 = mesh.addTrangle([p1, p3, p2]);
+    mesh.addTrangle([p1, p2, p4], new Colour(0, 255, 0));
+    mesh.addTrangle([p3, p4, p2], new Colour(0, 0, 255));
+    mesh.addTrangle([p1, p4, p3], new Colour(255, 255, 0));
+    mesh.addTrangle([p1, p3, p2]);
   }
   const scene = new Scene(new Colour(0, 0, 0));
-  scene.addShape(mesh);
+  const { centre } = mesh;
+  if (centre) {
+    const centredMesh = mesh.transform((v) => subtract(v, centre));
+    scene.addShape(centredMesh);
+  } else {
+    scene.addShape(mesh);
+  }
   const canvas = new CanvasParams(
     context.canvas.width,
     context.canvas.height,
-    1
+    d
   );
-  const image = render(context, canvas, scene.translateScene(vec(tx, ty, tz)));
+  const transformer = transform(
+    { x: tx, y: ty, z: tz },
+    { x: rx, y: ry, z: rz }
+  );
+  const image = render(context, canvas, scene.transformScene(transformer));
   context.putImageData(image, 0, 0);
 };
 
@@ -67,6 +78,7 @@ const foo = () => {
   let rx = 0;
   let ry = 0;
   let rz = 0;
+  let d = 1;
   {
     const tranlateControl = document.createElement("section");
     {
@@ -78,7 +90,7 @@ const foo = () => {
       transX.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         tx = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       tranlateControl.appendChild(transX);
     }
@@ -92,7 +104,7 @@ const foo = () => {
       transY.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         ty = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       tranlateControl.appendChild(transY);
     }
@@ -106,7 +118,7 @@ const foo = () => {
       transZ.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         tz = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       tranlateControl.appendChild(transZ);
     }
@@ -124,7 +136,7 @@ const foo = () => {
       rotX.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         rx = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       rotateControl.appendChild(rotX);
     }
@@ -138,7 +150,7 @@ const foo = () => {
       rotY.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         ry = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       rotateControl.appendChild(rotY);
     }
@@ -152,14 +164,32 @@ const foo = () => {
       rotZ.onchange = (event) => {
         const target = event.target as HTMLInputElement;
         rz = Number(target.value);
-        paint(context, tx, ty, tz, rx, ry, rz);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
       };
       rotateControl.appendChild(rotZ);
     }
     controlSection.appendChild(rotateControl);
   }
 
-  paint(context, tx, ty, tz, rx, ry, rz);
+  {
+    const canvasControl = document.createElement("section");
+    {
+      const depth = document.createElement("input") as HTMLInputElement;
+      depth.type = "range";
+      depth.min = "0.1";
+      depth.max = "50";
+      depth.value = d.toString();
+      depth.onchange = (event) => {
+        const target = event.target as HTMLInputElement;
+        d = Number(target.value);
+        paint(context, tx, ty, tz, rx, ry, rz, d);
+      };
+      canvasControl.appendChild(depth);
+    }
+    controlSection.appendChild(canvasControl);
+  }
+
+  paint(context, tx, ty, tz, rx, ry, rz, d);
 };
 
 foo();

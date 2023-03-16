@@ -18,13 +18,9 @@ export default class Triangle implements Shape {
     this.normal = cross(this.p01, this.p02);
     this.unitNormal = unit(this.normal);
   }
-  translate(t: Vector): Shape {
+  transform(f: (v: Vector) => Vector): Shape {
     const [p1, p2, p3] = this.points;
-    const newPoints: [Vector, Vector, Vector] = [
-      add(p1, t),
-      add(p2, t),
-      add(p3, t),
-    ];
+    const newPoints: [Vector, Vector, Vector] = [f(p1), f(p2), f(p3)];
     return new Triangle(newPoints, this.colour);
   }
   intersections(l: Ray): Intersection[] {

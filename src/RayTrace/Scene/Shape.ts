@@ -4,5 +4,5 @@ import Vector from "./Vector";
 
 export default interface Shape {
   intersections(ray: Ray): Intersection[];
-  translate(t: Vector): Shape;
+  transform(fn: (x: Vector) => Vector): Shape;
 }

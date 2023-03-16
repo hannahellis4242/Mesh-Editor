@@ -9,13 +9,13 @@ export default class Scene implements Shape {
   constructor(public readonly backround: Colour) {
     this.shapes = [];
   }
-  translate(t: Vector): Shape {
-    return this.translateScene(t);
+  transform(f: (v: Vector) => Vector): Shape {
+    return this.transformScene(f);
   }
-  translateScene(t: Vector): Scene {
+  transformScene(f: (v: Vector) => Vector): Scene {
     const newScene = new Scene(this.backround);
     this.shapes
-      .map((s) => s.translate(t))
+      .map((s) => s.transform(f))
       .forEach((shape) => newScene.addShape(shape));
     return newScene;
   }

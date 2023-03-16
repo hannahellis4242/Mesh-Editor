@@ -1,3 +1,12 @@
+import {
+  multiply,
+  multiplyVec,
+  translation,
+  xRotation,
+  yRotation,
+  zRotation,
+} from "./mesh/matrix4";
+
 export default interface Vector {
   readonly x: number;
   readonly y: number;
@@ -41,3 +50,16 @@ export const cross = (a: Vector, b: Vector): Vector => {
     z: a.x * b.y - a.y * b.x,
   };
 };
+
+export const transform =
+  (translate: Vector, rotate: Vector) =>
+  (vec: Vector): Vector => {
+    const xRot = xRotation((rotate.x * Math.PI) / 180);
+    const yRot = yRotation((rotate.y * Math.PI) / 180);
+    const zRot = zRotation((rotate.z * Math.PI) / 180);
+    const trans = translation(translate.x, translate.y, translate.z);
+    const [x, y, z, _] = multiplyVec(
+      multiply(xRot, multiply(yRot, multiply(zRot, trans)))
+    )([vec.x, vec.y, vec.z, 1]);
+    return { x, y, z };
+  };
