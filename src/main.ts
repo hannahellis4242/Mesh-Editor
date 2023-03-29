@@ -1,6 +1,7 @@
 import p5 from "p5";
+import Colour, { colours } from "./Mesh/Colour";
 import Mesh from "./Mesh/Mesh";
-import Vector, { vec } from "./Mesh/Vector";
+import { add, scale, vec } from "./Mesh/Vector";
 
 const mesh = new Mesh();
 {
@@ -16,53 +17,102 @@ const mesh = new Mesh();
   mesh.addTrangle([p2, p3, p4]);
   mesh.addTrangle([p1, p2, p4]);
 }
-console.log(mesh);
-const toP5Vec = ({ x, y, z }: Vector): p5.Vector => {
-  return new p5.Vector(x, y, z);
-};
-const convertMesh = (mesh: Mesh, colour: p5.Vector) =>
-  function (this: any) {
-    mesh.vertices.forEach((v) => {
-      this.vertices.push(toP5Vec(v));
-    });
-    mesh.surfaces.forEach((surface) => {
-      this.faces.push(surface.indices);
-      const n = toP5Vec(surface.unitNormal);
-      this.vertexNormals.push(n, n, n);
-      this.vertexColors.push(colour, colour, colour);
-    });
-    this.gid = "my shape";
-  };
 
-const shape = new p5.Geometry(
-  1,
-  1,
-  convertMesh(mesh, new p5.Vector(0.5, 0, 0))
-);
-console.log(shape);
+interface Stroke {
+  weight: number;
+  colour: Colour;
+}
+
+interface Normals extends Stroke {
+  size: number;
+}
+interface Config {
+  fill?: Colour;
+  stroke: Stroke;
+  normals?: Normals;
+}
+
+const wireframeConfig: Config = {
+  stroke: { colour: new Colour(255, 255, 255), weight: 1 },
+};
+
+const drawMesh = (mesh: Mesh) => (context: p5, config: Config) => {
+  context.push();
+  const { fill, stroke, normals } = config;
+  if (fill) {
+    const { red, green, blue, alpha } = fill;
+    context.fill(red, green, blue, alpha);
+  } else {
+    context.noFill();
+  }
+  const { colour, weight } = stroke;
+  context.stroke(colour.red, colour.green, colour.blue, colour.alpha);
+  context.strokeWeight(weight);
+  context.beginShape(context.TRIANGLES);
+  mesh.surfaces.forEach((surface) => {
+    const [p0, p1, p2] = surface.points;
+    context.vertex(p0.x, p0.y, p0.z);
+    context.vertex(p1.x, p1.y, p1.z);
+    context.vertex(p2.x, p2.y, p2.z);
+  });
+  context.endShape();
+  if (normals) {
+    const { colour, weight } = normals;
+    context.stroke(colour.red, colour.green, colour.blue, colour.alpha);
+    context.strokeWeight(weight);
+    mesh.surfaces.forEach((surface) => {
+      const [p0, p1, p2] = surface.points;
+      const centre = scale(1 / 3)(add(p0, add(p1, p2)));
+      const dir = scale(normals.size)(surface.unitNormal);
+      const end = add(centre, dir);
+      context.line(centre.x, centre.y, centre.z, end.x, end.y, end.z);
+    });
+  }
+  context.pop();
+};
+
+let rotate = true;
+let axes = true;
+
+const drawAxes = (size: number, weight: number) => (context: p5) => {
+  context.push();
+  context.strokeWeight(weight);
+  //x-axis
+  context.stroke(255, 0, 0);
+  context.line(0, 0, 0, size, 0, 0);
+  //y-axis
+  context.stroke(0, 255, 0);
+  context.line(0, 0, 0, 0, size, 0);
+  //z-axis
+  context.stroke(0, 0, 255);
+  context.line(0, 0, 0, 0, 0, size);
+  context.pop();
+};
+
 const sketch = (context: p5) => {
-  let cam: any;
   context.setup = () => {
     context.createCanvas(
       context.windowWidth - 40,
       context.windowHeight - 40,
       context.WEBGL
     );
-    cam = context.createCamera();
   };
   context.draw = () => {
     context.background("black");
-    context.orbitControl(2, 1, 0.05);
-    context.ambientLight(50);
-    context.directionalLight(
-      240,
-      0,
-      240,
-      cam.centerX - cam.eyeX,
-      cam.centerY - cam.eyeY,
-      cam.centerZ - cam.eyeZ
-    );
-    context.model(shape);
+    if (rotate) {
+      context.rotateX(context.frameCount * 0.01);
+      context.rotateY(context.frameCount * 0.02);
+    } else {
+      context.orbitControl(2, 1, 0.05);
+    }
+    if (axes) {
+      drawAxes(200, 10)(context);
+    }
+    drawMesh(mesh)(context, {
+      fill: colours.black,
+      stroke: { colour: colours.white, weight: 5 },
+      normals: { colour: new Colour(128, 128, 128), weight: 5, size: 20 },
+    });
   };
 };
 new p5(sketch);
