@@ -26,19 +26,33 @@ interface Stroke {
 interface Normals extends Stroke {
   size: number;
 }
+
+interface ColourAndSize {
+  colour: Colour;
+  size: number;
+}
+
 interface Config {
   fill?: Colour;
   stroke: Stroke;
   normals?: Normals;
+  vertices?: ColourAndSize;
 }
-
-const wireframeConfig: Config = {
-  stroke: { colour: new Colour(255, 255, 255), weight: 1 },
-};
 
 const drawMesh = (mesh: Mesh) => (context: p5, config: Config) => {
   context.push();
-  const { fill, stroke, normals } = config;
+  const { fill, stroke, normals, vertices } = config;
+  if (vertices) {
+    const { colour, size } = vertices;
+    context.fill(colour.red, colour.green, colour.blue, colour.alpha);
+    context.noStroke();
+    mesh.vertices.forEach(({ x, y, z }) => {
+      context.translate(x, y, z);
+      context.sphere(size);
+      context.translate(-x, -y, -z);
+    });
+  }
+
   if (fill) {
     const { red, green, blue, alpha } = fill;
     context.fill(red, green, blue, alpha);
@@ -109,9 +123,10 @@ const sketch = (context: p5) => {
       drawAxes(200, 10)(context);
     }
     drawMesh(mesh)(context, {
-      fill: colours.black,
-      stroke: { colour: colours.white, weight: 5 },
+      fill: colours.blue,
+      stroke: { colour: colours.black, weight: 5 },
       normals: { colour: new Colour(128, 128, 128), weight: 5, size: 20 },
+      vertices: { colour: colours.red, size: 10 },
     });
   };
 };
