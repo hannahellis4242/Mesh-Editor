@@ -27,7 +27,7 @@ const config = {
 };
 new p5(sketch({ rotate: false, axes: true })(config, mesh));
 
-const createRowButtons = (row: HTMLTableRowElement) => {
+const createRowButtons = (row: HTMLTableRowElement, rm: () => void) => {
   {
     const data = document.createElement("td");
     const button = document.createElement("button");
@@ -41,6 +41,7 @@ const createRowButtons = (row: HTMLTableRowElement) => {
     const button = document.createElement("button");
     button.classList.add("remove");
     button.innerText = "remove";
+    button.onclick = rm;
     data.appendChild(button);
     row.appendChild(data);
   }
@@ -80,7 +81,7 @@ const drawTables = (mesh: Mesh) => {
         data.innerText = z.toString();
         row.appendChild(data);
       }
-      createRowButtons(row);
+      createRowButtons(row, () => {});
       vertexTable.appendChild(row);
     });
   }
@@ -101,7 +102,10 @@ const drawTables = (mesh: Mesh) => {
         data.innerText = i.toString();
         row.appendChild(data);
       });
-      createRowButtons(row);
+      createRowButtons(row, () => {
+        mesh.removeTriangle(index);
+        drawTables(mesh);
+      });
       triangleTable.appendChild(row);
     });
   }

@@ -12,4 +12,7 @@ export default class Triangle {
     this.normal = cross(p01, p02);
     this.unitNormal = unit(this.normal);
   }
+  contains(index: number): boolean {
+    return this.indices.find((x) => x === index) !== undefined;
+  }
 }

@@ -37,4 +37,8 @@ export default class Mesh {
     this.surfaces.push(surface);
     return surface;
   }
+
+  removeTriangle(index: number) {
+    this.surfaces.splice(index, 1);
+  }
 }
