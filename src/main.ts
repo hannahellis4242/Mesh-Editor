@@ -1,7 +1,8 @@
 import p5 from "p5";
 import Colour, { colours } from "./Mesh/Colour";
 import Mesh from "./Mesh/Mesh";
-import { add, scale, vec } from "./Mesh/Vector";
+import { vec } from "./Mesh/Vector";
+import sketch from "./view/sketch";
 
 const mesh = new Mesh();
 {
@@ -18,116 +19,92 @@ const mesh = new Mesh();
   mesh.addTrangle([p1, p2, p4]);
 }
 
-interface Stroke {
-  weight: number;
-  colour: Colour;
-}
+const config = {
+  fill: colours.blue,
+  stroke: { colour: colours.black, weight: 5 },
+  normals: { colour: new Colour(128, 128, 128), weight: 5, size: 20 },
+  vertices: { colour: colours.red, size: 5 },
+};
+new p5(sketch({ rotate: false, axes: true })(config, mesh));
 
-interface Normals extends Stroke {
-  size: number;
-}
+const createRowButtons = (row: HTMLTableRowElement) => {
+  {
+    const data = document.createElement("td");
+    const button = document.createElement("button");
+    button.classList.add("select");
+    button.innerText = "select";
+    data.appendChild(button);
+    row.appendChild(data);
+  }
+  {
+    const data = document.createElement("td");
+    const button = document.createElement("button");
+    button.classList.add("remove");
+    button.innerText = "remove";
+    data.appendChild(button);
+    row.appendChild(data);
+  }
+  {
+    const data = document.createElement("td");
+    const button = document.createElement("button");
+    button.classList.add("edit");
+    button.innerText = "edit";
+    data.appendChild(button);
+    row.appendChild(data);
+  }
+};
 
-interface ColourAndSize {
-  colour: Colour;
-  size: number;
-}
-
-interface Config {
-  fill?: Colour;
-  stroke: Stroke;
-  normals?: Normals;
-  vertices?: ColourAndSize;
-}
-
-const drawMesh = (mesh: Mesh) => (context: p5, config: Config) => {
-  context.push();
-  const { fill, stroke, normals, vertices } = config;
-  if (vertices) {
-    const { colour, size } = vertices;
-    context.fill(colour.red, colour.green, colour.blue, colour.alpha);
-    context.noStroke();
-    mesh.vertices.forEach(({ x, y, z }) => {
-      context.translate(x, y, z);
-      context.sphere(size);
-      context.translate(-x, -y, -z);
+const drawTables = (mesh: Mesh) => {
+  const vertexTable = document.getElementById("vertex-table");
+  if (vertexTable) {
+    vertexTable.replaceChildren();
+    mesh.vertices.forEach(({ x, y, z }, index) => {
+      const row = document.createElement("tr");
+      {
+        const data = document.createElement("td");
+        data.innerText = index.toString();
+        row.appendChild(data);
+      }
+      {
+        const data = document.createElement("td");
+        data.innerText = x.toString();
+        row.appendChild(data);
+      }
+      {
+        const data = document.createElement("td");
+        data.innerText = y.toString();
+        row.appendChild(data);
+      }
+      {
+        const data = document.createElement("td");
+        data.innerText = z.toString();
+        row.appendChild(data);
+      }
+      createRowButtons(row);
+      vertexTable.appendChild(row);
     });
   }
 
-  if (fill) {
-    const { red, green, blue, alpha } = fill;
-    context.fill(red, green, blue, alpha);
-  } else {
-    context.noFill();
-  }
-  const { colour, weight } = stroke;
-  context.stroke(colour.red, colour.green, colour.blue, colour.alpha);
-  context.strokeWeight(weight);
-  context.beginShape(context.TRIANGLES);
-  mesh.surfaces.forEach((surface) => {
-    const [p0, p1, p2] = surface.points;
-    context.vertex(p0.x, p0.y, p0.z);
-    context.vertex(p1.x, p1.y, p1.z);
-    context.vertex(p2.x, p2.y, p2.z);
-  });
-  context.endShape();
-  if (normals) {
-    const { colour, weight } = normals;
-    context.stroke(colour.red, colour.green, colour.blue, colour.alpha);
-    context.strokeWeight(weight);
-    mesh.surfaces.forEach((surface) => {
-      const [p0, p1, p2] = surface.points;
-      const centre = scale(1 / 3)(add(p0, add(p1, p2)));
-      const dir = scale(normals.size)(surface.unitNormal);
-      const end = add(centre, dir);
-      context.line(centre.x, centre.y, centre.z, end.x, end.y, end.z);
+  const triangleTable = document.getElementById("triangle-table");
+  if (triangleTable) {
+    triangleTable.replaceChildren();
+    mesh.surfaces.forEach((surface, index) => {
+      const row = document.createElement("tr");
+      {
+        const data = document.createElement("td");
+        data.innerText = index.toString();
+        row.appendChild(data);
+      }
+      const { indices } = surface;
+      indices.forEach((i) => {
+        const data = document.createElement("td");
+        data.innerText = i.toString();
+        row.appendChild(data);
+      });
+      createRowButtons(row);
+      triangleTable.appendChild(row);
     });
   }
-  context.pop();
 };
 
-let rotate = true;
-let axes = true;
-
-const drawAxes = (size: number, weight: number) => (context: p5) => {
-  context.push();
-  context.strokeWeight(weight);
-  //x-axis
-  context.stroke(255, 0, 0);
-  context.line(0, 0, 0, size, 0, 0);
-  //y-axis
-  context.stroke(0, 255, 0);
-  context.line(0, 0, 0, 0, size, 0);
-  //z-axis
-  context.stroke(0, 0, 255);
-  context.line(0, 0, 0, 0, 0, size);
-  context.pop();
-};
-
-const sketch = (context: p5) => {
-  context.setup = () => {
-    context.createCanvas(
-      context.windowWidth - 40,
-      context.windowHeight - 40,
-      context.WEBGL
-    );
-  };
-  context.draw = () => {
-    context.background("black");
-    if (rotate) {
-      context.rotateX(context.frameCount * 0.01);
-      context.rotateY(context.frameCount * 0.02);
-    } else {
-      context.orbitControl(2, 1, 0.05);
-    }
-    if (axes) {
-      drawAxes(200, 10)(context);
-    }
-    drawMesh(mesh)(context, {
-      fill: colours.blue,
-      stroke: { colour: colours.black, weight: 5 },
-      normals: { colour: new Colour(128, 128, 128), weight: 5, size: 20 },
-      vertices: { colour: colours.red, size: 10 },
-    });
-  };
-};
-new p5(sketch);
+drawTables(mesh);
