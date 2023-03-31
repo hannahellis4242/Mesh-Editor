@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "build": "webpack",
-    "dev": "webpack serve"
+    "dev": "webpack serve",
+    "serve": "http-server -p 8080 dist"
   },
   "keywords": [],
   "author": "",
