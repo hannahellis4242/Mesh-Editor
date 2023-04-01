@@ -1,0 +1,22 @@
+name: Docker Image CI - book2
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Build And Push Image
+        run: |
+          docker build . --tag ghcr.io/hannahellis4242/graphics/graphics:latest
+          docker push ghcr.io/hannahellis4242/graphics/graphics:latest
