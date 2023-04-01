@@ -18,5 +18,5 @@ jobs:
 
       - name: Build And Push Image
         run: |
-          docker build . --tag ghcr.io/hannahellis4242/graphics/graphics:latest
-          docker push ghcr.io/hannahellis4242/graphics/graphics:latest
+          docker build . --tag ghcr.io/hannahellis4242/graphics/mesh:latest
+          docker push ghcr.io/hannahellis4242/graphics/mesh:latest
