@@ -1,4 +1,4 @@
-import Vector, { add, scale, zeroVec } from "../RayTrace/Scene/Vector";
+import Vector, { add, scale, zeroVec } from "./Vector";
 import { vec } from "./Vector";
 import Triangle from "./Triangle";
 
