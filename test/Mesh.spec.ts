@@ -10,19 +10,36 @@ const unit = (): Mesh => ({
 
 const build = (vertices: Vector[]): Mesh => ({ vertices });
 
-const addVertex = (parent: Mesh, vertex: Vector) => {
-  const found = parent.vertices.find((v) => equal(v, vertex));
-  return found ? parent : build(parent.vertices.concat(vertex));
+//vertex crud
+//create
+const addVertex = (mesh: Mesh, vertex: Vector) => {
+  const found = mesh.vertices.find((v) => equal(v, vertex));
+  return found ? mesh : build(mesh.vertices.concat(vertex));
 };
-
-const removeVertex = (parent: Mesh, index: number) => {
+//read
+const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
+  mesh.vertices.at(index);
+//edit
+interface ReplaceVertex {
+  index: number;
+  value: Vector;
+}
+const replaceVertex = (mesh: Mesh, { index, value }: ReplaceVertex) => {
+  const found = getVertex(mesh, index);
+  if (!found) {
+    return mesh;
+  }
+  return build(mesh.vertices.map((v, i) => (i === index ? value : v)));
+};
+//delete
+const removeVertex = (mesh: Mesh, index: number) => {
   if (index < 0) {
-    return parent;
+    return mesh;
   }
-  if (index >= parent.vertices.length) {
-    return parent;
+  if (index >= mesh.vertices.length) {
+    return mesh;
   }
-  return build(parent.vertices.filter((_, i) => i == index));
+  return build(mesh.vertices.filter((_, i) => i == index));
 };
 
 describe("Mesh", () => {
@@ -57,6 +74,42 @@ describe("Mesh", () => {
     const init = addVertex(unit(), vec(1, 2, 3));
     const mesh = addVertex(init, vec(1, 2, 3));
     it("should have one vertex", () => expect(mesh.vertices).toHaveLength(1));
+  });
+  describe("getting a vertex from a mesh", () => {
+    const init = addVertex(unit(), vec(1, 2, 3));
+    it("should find the zeroth entry", () => {
+      const value = getVertex(init, 0);
+      expect(value).toBeDefined();
+      if (value) {
+        const { x, y, z } = value;
+        expect(x).toBe(1);
+        expect(y).toBe(2);
+        expect(z).toBe(3);
+      }
+    });
+  });
+  describe("getting a vertex from a mesh that doesn't exist", () => {
+    const init = addVertex(unit(), vec(1, 2, 3));
+    it("should find the first entry", () => {
+      const value = getVertex(init, 1);
+      expect(value).toBeUndefined();
+    });
+  });
+  describe("replacing a vertex", () => {
+    const vertex = vec(1, 2, 3);
+    const init = addVertex(unit(), vertex);
+    it("should have one vertex with a new value", () => {
+      const mesh = replaceVertex(init, { index: 0, value: vec(3, 2, 1) });
+      expect(mesh.vertices).toHaveLength(1);
+      const value = getVertex(mesh, 0);
+      expect(value).toBeDefined();
+      if (value) {
+        const { x, y, z } = value;
+        expect(x).toBe(3);
+        expect(y).toBe(2);
+        expect(z).toBe(1);
+      }
+    });
   });
   describe("removing an existing vertex from the mesh", () => {
     const init = addVertex(addVertex(unit(), vec(1, 2, 3)), vec(2, 3, 4));
