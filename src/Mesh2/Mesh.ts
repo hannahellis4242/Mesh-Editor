@@ -86,6 +86,9 @@ export const replaceSurface = (
   mesh: Mesh,
   { index, value }: ReplaceSurface
 ): Mesh => {
+  if (index >= mesh.surfaces.length) {
+    return mesh;
+  }
   return build(
     mesh.vertices,
     mesh.surfaces.map((v, i) => (i === index ? triangle(value) : v))
