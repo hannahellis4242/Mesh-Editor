@@ -2,9 +2,11 @@ import Vector, {
   add,
   cross,
   dot,
+  equal,
   negate,
   scale,
   subtract,
+  vec,
   zeroVec,
 } from "../src/Mesh/Vector";
 
@@ -72,6 +74,28 @@ describe("Vector", () => {
       expect(x).toBe(-10);
       expect(y).toBe(-4);
       expect(z).toBe(6);
+    });
+  });
+  describe("equal", () => {
+    describe("a vector is always equal to itself", () => {
+      const a = vec(1, 2, 3);
+      it("should give true", () => {
+        expect(equal(a, a)).toBeTruthy();
+      });
+    });
+    describe("two different vectors with different values", () => {
+      const a = vec(1, 2, 3);
+      const b = vec(1, 3, 3);
+      it("should give false", () => {
+        expect(equal(a, b)).toBeFalsy();
+      });
+    });
+    describe("two different vectors with the same value", () => {
+      const a = vec(1, 2, 3);
+      const b = vec(1, 2, 3);
+      it("should give true", () => {
+        expect(equal(a, b)).toBeTruthy();
+      });
     });
   });
 });

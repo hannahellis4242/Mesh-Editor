@@ -41,3 +41,6 @@ export const cross = (a: Vector, b: Vector): Vector => {
     z: a.x * b.y - a.y * b.x,
   };
 };
+
+export const equal = (a: Vector, b: Vector): boolean =>
+  a.x === b.x && a.y === b.y && a.z === b.z;
