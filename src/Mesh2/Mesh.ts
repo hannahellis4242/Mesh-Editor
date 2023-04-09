@@ -73,5 +73,7 @@ export const addSurface = (mesh: Mesh, indices: [number, number, number]) => {
   return found ? mesh : build(mesh.vertices, mesh.surfaces.concat(surface));
 };
 //read
+export const getSurface = (mesh: Mesh, index: number): Triangle | undefined =>
+  mesh.surfaces.at(index);
 //update
 //delete

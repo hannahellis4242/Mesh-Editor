@@ -2,6 +2,7 @@ import Mesh, {
   addSurface,
   addVertex,
   addVertices,
+  getSurface,
   getVertex,
   removeVertex,
   replaceVertex,
@@ -169,6 +170,30 @@ describe("Mesh", () => {
       const mesh = addSurface(init, [0, 2, 3]);
       it("should have two surfaces", () => {
         expect(mesh.surfaces).toHaveLength(2);
+      });
+    });
+    describe("getting a surface", () => {
+      const mesh = addSurface(
+        addSurface(
+          addVertices(unit(), [
+            vec(-1, -1, 0),
+            vec(1, -1, 1),
+            vec(1, 1, -1),
+            vec(-1, 1, 0),
+          ]),
+          [0, 1, 2]
+        ),
+        [0, 2, 3]
+      );
+      it("should have two surfaces", () => {
+        const value = getSurface(mesh, 0);
+        expect(value).toBeDefined();
+        if (value) {
+          const [p0, p1, p2] = value.indices;
+          expect(p0).toBe(0);
+          expect(p1).toBe(1);
+          expect(p2).toBe(2);
+        }
       });
     });
   });
