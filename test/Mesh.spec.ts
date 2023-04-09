@@ -1,5 +1,8 @@
 import Vector, { equal, vec } from "../src/Mesh/Vector";
-import Triangle from "../src/Mesh/Triangle";
+
+interface Triangle {
+  readonly indices: [number, number, number];
+}
 
 interface Mesh {
   readonly vertices: Vector[];
@@ -58,6 +61,12 @@ const removeVertex = (mesh: Mesh, index: number): Mesh => {
 
 //surface crud
 //create
+const addSurface = (mesh: Mesh, indices: [number, number, number]) => {
+  const allExist = indices.every((x) => mesh.vertices.at(x));
+  return allExist
+    ? build(mesh.vertices, mesh.surfaces.concat({ indices }))
+    : mesh;
+};
 //read
 //update
 //delete
@@ -156,6 +165,35 @@ describe("Mesh", () => {
   describe("surface operations", () => {
     describe("unit mesh", () => {
       const mesh = unit();
+      it("should have no surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(0);
+      });
+    });
+    describe("when adding a surface", () => {
+      const init = addVertices(unit(), [
+        vec(5, -4, 0),
+        vec(4, 2, 0),
+        vec(-1, 5, 0),
+      ]);
+      const mesh = addSurface(init, [0, 1, 2]);
+      it("should have one surface", () => {
+        expect(mesh.surfaces).toHaveLength(1);
+      });
+      it("should have value [0,1,2]", () => {
+        const [triangle] = mesh.surfaces;
+        const [p0, p1, p2] = triangle.indices;
+        expect(p0).toBe(0);
+        expect(p1).toBe(1);
+        expect(p2).toBe(2);
+      });
+    });
+    describe("when adding a surface with and index that doesn't exist", () => {
+      const init = addVertices(unit(), [
+        vec(5, -4, 0),
+        vec(4, 2, 0),
+        vec(-1, 5, 0),
+      ]);
+      const mesh = addSurface(init, [0, 1, 3]);
       it("should have no surfaces", () => {
         expect(mesh.surfaces).toHaveLength(0);
       });
