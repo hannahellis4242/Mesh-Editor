@@ -78,4 +78,17 @@ export const addSurfaces = (mesh: Mesh, indices: Indices[]) =>
 export const getSurface = (mesh: Mesh, index: number): Triangle | undefined =>
   mesh.surfaces.at(index);
 //update
+export interface ReplaceSurface {
+  index: number;
+  value: Indices;
+}
+export const replaceSurface = (
+  mesh: Mesh,
+  { index, value }: ReplaceSurface
+): Mesh => {
+  return build(
+    mesh.vertices,
+    mesh.surfaces.map((v, i) => (i === index ? triangle(value) : v))
+  );
+};
 //delete

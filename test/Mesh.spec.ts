@@ -6,6 +6,7 @@ import Mesh, {
   getSurface,
   getVertex,
   removeVertex,
+  replaceSurface,
   replaceVertex,
   unit,
 } from "../src/Mesh2/Mesh";
@@ -214,11 +215,58 @@ describe("Mesh", () => {
         }
       });
     });
-    describe("interaction between vertex and surface operations", () => {
-      it("placeholder", () => expect(true).toBeTruthy());
+    describe("getting a surface that doesn't exist", () => {
+      const mesh = addSurface(
+        addSurface(
+          addVertices(unit(), [
+            vec(-1, -1, 0),
+            vec(1, -1, 1),
+            vec(1, 1, -1),
+            vec(-1, 1, 0),
+          ]),
+          [0, 1, 2]
+        ),
+        [0, 2, 3]
+      );
+      it("should give the first surface", () => {
+        const value = getSurface(mesh, 2);
+        expect(value).toBeUndefined();
+      });
     });
-    describe("surface normals", () => {
-      it("placeholder", () => expect(true).toBeTruthy());
+    describe("editing a surface", () => {
+      const init = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+          vec(0, 2, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      const mesh = replaceSurface(init, { index: 1, value: [0, 2, 4] });
+      it("should have two surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(2);
+      });
+      it("should have updated the last surface to be new value", () => {
+        const found = getSurface(mesh, 1);
+        expect(found).toBeTruthy();
+        if (found) {
+          const [p0, p1, p2] = found.indices;
+          expect(p0).toBe(0);
+          expect(p1).toBe(2);
+          expect(p2).toBe(4);
+        }
+      });
     });
+  });
+  describe("interaction between vertex and surface operations", () => {
+    it("placeholder", () => expect(true).toBeTruthy());
+  });
+  describe("surface normals", () => {
+    it("placeholder", () => expect(true).toBeTruthy());
   });
 });
