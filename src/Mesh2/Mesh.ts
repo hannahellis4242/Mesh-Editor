@@ -1,4 +1,4 @@
-import Triangle from "./Triangle";
+import Triangle, { equalTriangles, triangle } from "./Triangle";
 import Vector, { equalVectors } from "./Vector";
 
 export default interface Mesh {
@@ -67,9 +67,10 @@ export const addSurface = (mesh: Mesh, indices: [number, number, number]) => {
   if (!allExist) {
     return mesh;
   }
+  const surface = triangle(indices);
   //check we don't already have this surface
-  const found = mesh.surfaces.find((x) => equalVectors());
-  return build(mesh.vertices, mesh.surfaces.concat({ indices }));
+  const found = mesh.surfaces.find((x) => equalTriangles(x, surface));
+  return found ? mesh : build(mesh.vertices, mesh.surfaces.concat(surface));
 };
 //read
 //update

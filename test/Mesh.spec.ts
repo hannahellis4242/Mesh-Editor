@@ -147,4 +147,10 @@ describe("Mesh", () => {
       });
     });
   });
+  describe("interaction between vertex and surface operations", () => {
+    it("placeholder", () => expect(true).toBeTruthy());
+  });
+  describe("surface normals", () => {
+    it("placeholder", () => expect(true).toBeTruthy());
+  });
 });
