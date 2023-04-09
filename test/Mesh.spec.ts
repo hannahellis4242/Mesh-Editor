@@ -12,10 +12,12 @@ const build = (vertices: Vector[]): Mesh => ({ vertices });
 
 //vertex crud
 //create
-const addVertex = (mesh: Mesh, vertex: Vector) => {
+const addVertex = (mesh: Mesh, vertex: Vector): Mesh => {
   const found = mesh.vertices.find((v) => equal(v, vertex));
   return found ? mesh : build(mesh.vertices.concat(vertex));
 };
+const addVertices = (mesh: Mesh, vertices: Vector[]): Mesh =>
+  vertices.reduce((acc, v) => addVertex(acc, v), mesh);
 //read
 const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
   mesh.vertices.at(index);
@@ -24,7 +26,7 @@ interface ReplaceVertex {
   index: number;
   value: Vector;
 }
-const replaceVertex = (mesh: Mesh, { index, value }: ReplaceVertex) => {
+const replaceVertex = (mesh: Mesh, { index, value }: ReplaceVertex): Mesh => {
   const found = getVertex(mesh, index);
   if (!found) {
     return mesh;
@@ -32,7 +34,7 @@ const replaceVertex = (mesh: Mesh, { index, value }: ReplaceVertex) => {
   return build(mesh.vertices.map((v, i) => (i === index ? value : v)));
 };
 //delete
-const removeVertex = (mesh: Mesh, index: number) => {
+const removeVertex = (mesh: Mesh, index: number): Mesh => {
   if (index < 0) {
     return mesh;
   }
@@ -74,6 +76,18 @@ describe("Mesh", () => {
     const init = addVertex(unit(), vec(1, 2, 3));
     const mesh = addVertex(init, vec(1, 2, 3));
     it("should have one vertex", () => expect(mesh.vertices).toHaveLength(1));
+  });
+  describe("adding mulitple verctices to the mesh", () => {
+    const mesh = addVertices(unit(), [
+      vec(1, 2, 3),
+      vec(2, 3, 4),
+      vec(3, 4, 5),
+      vec(1, 2, 3),
+      vec(4, 5, 6),
+    ]);
+    it("should have 4 vertices", () => {
+      expect(mesh.vertices).toHaveLength(4);
+    });
   });
   describe("getting a vertex from a mesh", () => {
     const init = addVertex(unit(), vec(1, 2, 3));
