@@ -146,6 +146,31 @@ describe("Mesh", () => {
         expect(mesh.surfaces).toHaveLength(1);
       });
     });
+    describe("when adding a surface that already exists but is just a rotation", () => {
+      const init = addSurface(
+        addVertices(unit(), [vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)]),
+        [0, 1, 2]
+      );
+      const mesh = addSurface(init, [1, 2, 0]);
+      it("should have one surface", () => {
+        expect(mesh.surfaces).toHaveLength(1);
+      });
+    });
+    describe("when adding a new surface", () => {
+      const init = addSurface(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+        ]),
+        [0, 1, 2]
+      );
+      const mesh = addSurface(init, [0, 2, 3]);
+      it("should have two surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(2);
+      });
+    });
   });
   describe("interaction between vertex and surface operations", () => {
     it("placeholder", () => expect(true).toBeTruthy());
