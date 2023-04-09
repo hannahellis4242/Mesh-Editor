@@ -342,6 +342,26 @@ describe("Mesh", () => {
         expect(mesh.surfaces).toHaveLength(1);
       });
     });
+    describe("remove a surface that doesn't exist", () => {
+      const init = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+          vec(0, 2, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      const mesh = removeSurface(init, 4);
+      it("should have two surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(2);
+      });
+      it("should still be the same mesh", () => expect(mesh).toBe(init));
+    });
   });
   describe("interaction between vertex and surface operations", () => {
     it("placeholder", () => expect(true).toBeTruthy());

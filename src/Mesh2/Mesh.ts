@@ -105,6 +105,10 @@ export const replaceSurface = (
 };
 //delete
 export const removeSurface = (mesh: Mesh, index: number): Mesh => {
+  const found = mesh.surfaces.at(index);
+  if (!found) {
+    return mesh;
+  }
   return build(
     mesh.vertices,
     mesh.surfaces.filter((_, i) => i !== index)
