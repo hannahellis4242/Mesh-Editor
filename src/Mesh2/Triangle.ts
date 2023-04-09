@@ -1,4 +1,4 @@
-type Indices = [number, number, number];
+export type Indices = [number, number, number];
 export default interface Triangle {
   readonly indices: Indices;
 }

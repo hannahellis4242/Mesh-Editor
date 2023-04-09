@@ -1,5 +1,6 @@
 import Mesh, {
   addSurface,
+  addSurfaces,
   addVertex,
   addVertices,
   getSurface,
@@ -172,6 +173,23 @@ describe("Mesh", () => {
         expect(mesh.surfaces).toHaveLength(2);
       });
     });
+    describe("adding surfaces", () => {
+      const mesh = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      it("should have two surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(2);
+      });
+    });
     describe("getting a surface", () => {
       const mesh = addSurface(
         addSurface(
@@ -185,7 +203,7 @@ describe("Mesh", () => {
         ),
         [0, 2, 3]
       );
-      it("should have two surfaces", () => {
+      it("should give the first surface", () => {
         const value = getSurface(mesh, 0);
         expect(value).toBeDefined();
         if (value) {
@@ -196,11 +214,11 @@ describe("Mesh", () => {
         }
       });
     });
-  });
-  describe("interaction between vertex and surface operations", () => {
-    it("placeholder", () => expect(true).toBeTruthy());
-  });
-  describe("surface normals", () => {
-    it("placeholder", () => expect(true).toBeTruthy());
+    describe("interaction between vertex and surface operations", () => {
+      it("placeholder", () => expect(true).toBeTruthy());
+    });
+    describe("surface normals", () => {
+      it("placeholder", () => expect(true).toBeTruthy());
+    });
   });
 });
