@@ -103,6 +103,24 @@ describe("Mesh", () => {
       it("should now have only one vertex", () =>
         expect(mesh.vertices).toHaveLength(1));
     });
+    describe("removing a vertex again", () => {
+      const init = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      const mesh = removeVertex(init, 3);
+      it("should remove a vertex", () => {
+        expect(mesh.vertices).toHaveLength(3);
+      });
+    });
   });
   describe("surface operations", () => {
     describe("unit mesh", () => {
@@ -363,8 +381,26 @@ describe("Mesh", () => {
       it("should still be the same mesh", () => expect(mesh).toBe(init));
     });
   });
-  describe("interaction between vertex and surface operations", () => {
-    it("placeholder", () => expect(true).toBeTruthy());
+  describe.skip("interaction between vertex and surface operations", () => {
+    describe("removing a vertex", () => {
+      const init = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      const mesh = removeVertex(init, 3);
+      it("should also remove any surface that uses the vertex", () => {
+        expect(mesh.vertices).toHaveLength(3);
+        expect(mesh.surfaces).toHaveLength(1);
+      });
+    });
   });
   describe("surface normals", () => {
     it("placeholder", () => expect(true).toBeTruthy());

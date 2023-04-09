@@ -50,7 +50,7 @@ export const removeVertex = (mesh: Mesh, index: number): Mesh => {
   const found = mesh.vertices.at(index);
   return found
     ? build(
-        mesh.vertices.filter((_, i) => i == index),
+        mesh.vertices.filter((_, i) => i !== index),
         mesh.surfaces
       )
     : mesh;
