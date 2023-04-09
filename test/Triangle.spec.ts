@@ -1,4 +1,4 @@
-import Triangle, { equalTriangles, triangle } from "../src/Mesh2/Triangle";
+import { equalTriangles, triangle, uses } from "../src/Mesh2/Triangle";
 describe("Triangle", () => {
   describe("equal", () => {
     describe("one triangle", () => {
@@ -41,6 +41,16 @@ describe("Triangle", () => {
       it("should give false", () => {
         expect(equalTriangles(a, b)).toBeFalsy();
       });
+    });
+  });
+  describe("uses", () => {
+    describe("when the triangle contains the index", () => {
+      const tri = triangle([1, 2, 3]);
+      it("should return true", () => expect(uses(tri, 1)).toBeTruthy());
+    });
+    describe("when the triangle does not contain the index", () => {
+      const tri = triangle([1, 2, 3]);
+      it("should return false", () => expect(uses(tri, 4)).toBeFalsy());
     });
   });
 });

@@ -21,3 +21,6 @@ export const equalTriangles = (a: Triangle, b: Triangle): boolean => {
   const equalTo = equal(b.indices);
   return rotations.some(equalTo);
 };
+
+export const uses = (tri: Triangle, index: number) =>
+  tri.indices.some((x) => x === index);

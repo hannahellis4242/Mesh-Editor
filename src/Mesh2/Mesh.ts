@@ -1,4 +1,4 @@
-import Triangle, { Indices, equalTriangles, triangle } from "./Triangle";
+import Triangle, { Indices, equalTriangles, triangle, uses } from "./Triangle";
 import Vector, { equalVectors } from "./Vector";
 
 export default interface Mesh {
@@ -51,7 +51,7 @@ export const removeVertex = (mesh: Mesh, index: number): Mesh => {
   return found
     ? build(
         mesh.vertices.filter((_, i) => i !== index),
-        mesh.surfaces
+        mesh.surfaces.filter((tri) => !uses(tri, index))
       )
     : mesh;
 };

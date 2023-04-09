@@ -381,7 +381,7 @@ describe("Mesh", () => {
       it("should still be the same mesh", () => expect(mesh).toBe(init));
     });
   });
-  describe.skip("interaction between vertex and surface operations", () => {
+  describe("interaction between vertex and surface operations", () => {
     describe("removing a vertex", () => {
       const init = addSurfaces(
         addVertices(unit(), [
