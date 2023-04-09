@@ -1,75 +1,13 @@
-import Vector, { equal, vec } from "../src/Mesh/Vector";
-
-interface Triangle {
-  readonly indices: [number, number, number];
-}
-
-interface Mesh {
-  readonly vertices: Vector[];
-  readonly surfaces: Triangle[];
-}
-
-const unit = (): Mesh => ({
-  vertices: [],
-  surfaces: [],
-});
-
-const build = (vertices: Vector[], surfaces: Triangle[]): Mesh => ({
-  vertices,
-  surfaces,
-});
-
-//vertex crud
-//create
-const addVertex = (mesh: Mesh, vertex: Vector): Mesh => {
-  const found = mesh.vertices.find((v) => equal(v, vertex));
-  return found ? mesh : build(mesh.vertices.concat(vertex), mesh.surfaces);
-};
-const addVertices = (mesh: Mesh, vertices: Vector[]): Mesh =>
-  vertices.reduce((acc, v) => addVertex(acc, v), mesh);
-//read
-const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
-  mesh.vertices.at(index);
-//edit
-interface ReplaceVertex {
-  index: number;
-  value: Vector;
-}
-const replaceVertex = (mesh: Mesh, { index, value }: ReplaceVertex): Mesh => {
-  const found = getVertex(mesh, index);
-  if (!found) {
-    return mesh;
-  }
-  return build(
-    mesh.vertices.map((v, i) => (i === index ? value : v)),
-    mesh.surfaces
-  );
-};
-//delete
-const removeVertex = (mesh: Mesh, index: number): Mesh => {
-  if (index < 0) {
-    return mesh;
-  }
-  if (index >= mesh.vertices.length) {
-    return mesh;
-  }
-  return build(
-    mesh.vertices.filter((_, i) => i == index),
-    mesh.surfaces
-  );
-};
-
-//surface crud
-//create
-const addSurface = (mesh: Mesh, indices: [number, number, number]) => {
-  const allExist = indices.every((x) => mesh.vertices.at(x));
-  return allExist
-    ? build(mesh.vertices, mesh.surfaces.concat({ indices }))
-    : mesh;
-};
-//read
-//update
-//delete
+import Mesh, {
+  addSurface,
+  addVertex,
+  addVertices,
+  getVertex,
+  removeVertex,
+  replaceVertex,
+  unit,
+} from "../src/Mesh2/Mesh";
+import { vec } from "../src/Mesh2/Vector";
 
 describe("Mesh", () => {
   describe("vertex operations", () => {
@@ -196,6 +134,16 @@ describe("Mesh", () => {
       const mesh = addSurface(init, [0, 1, 3]);
       it("should have no surfaces", () => {
         expect(mesh.surfaces).toHaveLength(0);
+      });
+    });
+    describe("when adding a surface that already exists", () => {
+      const init = addSurface(
+        addVertices(unit(), [vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)]),
+        [0, 1, 2]
+      );
+      const mesh = addSurface(init, [0, 1, 2]);
+      it("should have one surface", () => {
+        expect(mesh.surfaces).toHaveLength(1);
       });
     });
   });
