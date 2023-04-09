@@ -47,30 +47,36 @@ export const replaceVertex = (
 };
 //delete
 export const removeVertex = (mesh: Mesh, index: number): Mesh => {
-  if (index < 0) {
-    return mesh;
-  }
-  if (index >= mesh.vertices.length) {
-    return mesh;
-  }
-  return build(
-    mesh.vertices.filter((_, i) => i == index),
-    mesh.surfaces
-  );
+  const found = mesh.vertices.at(index);
+  return found
+    ? build(
+        mesh.vertices.filter((_, i) => i == index),
+        mesh.surfaces
+      )
+    : mesh;
 };
 
 //surface crud
-//create
-export const addSurface = (mesh: Mesh, indices: Indices) => {
-  //check all vertices exist
+const surfaceCanBeAdded = (mesh: Mesh, indices: Indices): boolean => {
   const allExist = indices.every((x) => mesh.vertices.at(x));
   if (!allExist) {
-    return mesh;
+    //mesh does not contain all the vertices in indices
+    return false;
   }
   const surface = triangle(indices);
-  //check we don't already have this surface
   const found = mesh.surfaces.find((x) => equalTriangles(x, surface));
-  return found ? mesh : build(mesh.vertices, mesh.surfaces.concat(surface));
+  if (found) {
+    //mesh already contains this triangle
+    return false;
+  }
+  return true;
+};
+
+//create
+export const addSurface = (mesh: Mesh, indices: Indices) => {
+  return surfaceCanBeAdded(mesh, indices)
+    ? build(mesh.vertices, mesh.surfaces.concat(triangle(indices)))
+    : mesh;
 };
 export const addSurfaces = (mesh: Mesh, indices: Indices[]) =>
   indices.reduce((acc, x) => addSurface(acc, x), mesh);
@@ -87,7 +93,10 @@ export const replaceSurface = (
   { index, value }: ReplaceSurface
 ): Mesh => {
   const found = mesh.surfaces.at(index);
-  return found
+  if (!found) {
+    return mesh;
+  }
+  return surfaceCanBeAdded(mesh, value)
     ? build(
         mesh.vertices,
         mesh.surfaces.map((v, i) => (i === index ? triangle(value) : v))

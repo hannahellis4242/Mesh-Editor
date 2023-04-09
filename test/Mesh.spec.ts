@@ -282,6 +282,26 @@ describe("Mesh", () => {
       });
       it("should give back the same mesh", () => expect(mesh).toBe(init));
     });
+    describe("replacing a surface with a new surface that uses a vertex that doesn't exist", () => {
+      const init = addSurfaces(
+        addVertices(unit(), [
+          vec(-1, -1, 0),
+          vec(1, -1, 1),
+          vec(1, 1, -1),
+          vec(-1, 1, 0),
+          vec(0, 2, 0),
+        ]),
+        [
+          [0, 1, 2],
+          [0, 2, 3],
+        ]
+      );
+      const mesh = replaceSurface(init, { index: 1, value: [0, 5, 4] });
+      it("should have two surfaces", () => {
+        expect(mesh.surfaces).toHaveLength(2);
+      });
+      it("should give back the same mesh", () => expect(mesh).toBe(init));
+    });
   });
   describe("interaction between vertex and surface operations", () => {
     it("placeholder", () => expect(true).toBeTruthy());
