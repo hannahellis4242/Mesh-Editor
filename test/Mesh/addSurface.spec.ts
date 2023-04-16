@@ -65,4 +65,20 @@ describe("addSurface", () => {
       expect(mesh.surfaces).toHaveLength(2);
     });
   });
+  describe("adding surfaces", () => {
+    const mesh = addSurface(
+      [0, 1, 2],
+      [0, 2, 3]
+    )(
+      addVertex(
+        vec(-1, -1, 0),
+        vec(1, -1, 1),
+        vec(1, 1, -1),
+        vec(-1, 1, 0)
+      )(unitMesh())
+    );
+    it("should have two surfaces", () => {
+      expect(mesh.surfaces).toHaveLength(2);
+    });
+  });
 });

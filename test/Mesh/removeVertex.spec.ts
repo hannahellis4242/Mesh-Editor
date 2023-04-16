@@ -1,4 +1,4 @@
-import addSurfaces from "../../src/Mesh2/addSurfaces";
+import addSurface from "../../src/Mesh2/addSurface";
 import { vec } from "../../src/Mesh2/Vector";
 import addVertex from "../../src/Mesh2/addVertex";
 import unitMesh from "../../src/Mesh2/unitMesh";
@@ -12,7 +12,7 @@ describe("removeVertex", () => {
       expect(mesh.vertices).toHaveLength(1));
   });
   describe("removing a vertex again", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
@@ -29,7 +29,7 @@ describe("removeVertex", () => {
     });
   });
   describe("when removing a vertex", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(

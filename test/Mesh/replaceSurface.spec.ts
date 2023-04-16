@@ -1,5 +1,5 @@
 import { vec } from "../../src/Mesh2/Vector";
-import addSurfaces from "../../src/Mesh2/addSurfaces";
+import addSurface from "../../src/Mesh2/addSurface";
 import addVertex from "../../src/Mesh2/addVertex";
 import getSurface from "../../src/Mesh2/getSurface";
 import unitMesh from "../../src/Mesh2/unitMesh";
@@ -7,7 +7,7 @@ import replaceSurface from "../../src/Mesh2/replaceSurface";
 
 describe("replaceSurface", () => {
   describe("when editing a surface", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
@@ -35,7 +35,7 @@ describe("replaceSurface", () => {
     });
   });
   describe("editing a surface that doesn't exist", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
@@ -54,7 +54,7 @@ describe("replaceSurface", () => {
     it("should give back the same mesh", () => expect(mesh).toBe(init));
   });
   describe("replacing a surface with a new surface that uses a vertex that doesn't exist", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
@@ -73,7 +73,7 @@ describe("replaceSurface", () => {
     it("should give back the same mesh", () => expect(mesh).toBe(init));
   });
   describe("replacing a surface with an existing surface", () => {
-    const init = addSurfaces(
+    const init = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(

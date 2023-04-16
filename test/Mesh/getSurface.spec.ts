@@ -1,12 +1,12 @@
 import { vec } from "../../src/Mesh2/Vector";
-import addSurfaces from "../../src/Mesh2/addSurfaces";
+import addSurface from "../../src/Mesh2/addSurface";
 import addVertex from "../../src/Mesh2/addVertex";
 import unitMesh from "../../src/Mesh2/unitMesh";
 import getSurface from "../../src/Mesh2/getSurface";
 
 describe("getSurface", () => {
   describe("getting a surface", () => {
-    const mesh = addSurfaces(
+    const mesh = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
@@ -29,7 +29,7 @@ describe("getSurface", () => {
     });
   });
   describe("getting a surface that doesn't exist", () => {
-    const mesh = addSurfaces(
+    const mesh = addSurface(
       [0, 1, 2],
       [0, 2, 3]
     )(
