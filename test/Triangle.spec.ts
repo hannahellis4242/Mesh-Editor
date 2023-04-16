@@ -1,44 +1,56 @@
-import Triangle from "../src/Mesh/Triangle";
-import { vec } from "../src/Mesh/Vector";
+import { equalTriangles, triangle, uses } from "../src/Mesh2/Triangle";
 describe("Triangle", () => {
-  describe("when flat", () => {
-    const p1 = vec(0, 0, 0);
-    const p2 = vec(1, 0, 0);
-    const p3 = vec(0, 1, 0);
-    const triangle = new Triangle([1, 2, 3], [p1, p2, p3]);
-    it("should contain the index 1", () => {
-      expect(triangle.contains(1)).toBeTruthy();
+  describe("equal", () => {
+    describe("one triangle", () => {
+      const tri = triangle([0, 1, 2]);
+      it("should give true", () => {
+        expect(equalTriangles(tri, tri)).toBeTruthy();
+      });
     });
-    it("should not contain the index 4", () => {
-      expect(triangle.contains(4)).toBeFalsy();
+    describe("two different triangles", () => {
+      const a = triangle([0, 1, 2]);
+      const b = triangle([1, 2, 3]);
+      it("should give false", () => {
+        expect(equalTriangles(a, b)).toBeFalsy();
+      });
     });
-    const { normal } = triangle;
-    it("should give a normal (0,0,1)", () => {
-      const { x, y, z } = normal;
-      expect(x).toBe(0);
-      expect(y).toBe(0);
-      expect(z).toBe(1);
+    describe("two different triangles with the same value", () => {
+      const a = triangle([1, 2, 3]);
+      const b = triangle([1, 2, 3]);
+      it("should give true", () => {
+        expect(equalTriangles(a, b)).toBeTruthy();
+      });
+    });
+    describe("two different triangles with rotated values", () => {
+      const a = triangle([1, 2, 3]);
+      const b = triangle([3, 1, 2]);
+      it("should give true", () => {
+        expect(equalTriangles(a, b)).toBeTruthy();
+      });
+    });
+    describe("two different triangles with different rotated values", () => {
+      const a = triangle([1, 2, 3]);
+      const b = triangle([2, 3, 1]);
+      it("should give true", () => {
+        expect(equalTriangles(a, b)).toBeTruthy();
+      });
+    });
+    describe("two different triangles with anti rotated values", () => {
+      const a = triangle([1, 2, 3]);
+      const b = triangle([3, 2, 1]);
+      it("should give false", () => {
+        expect(equalTriangles(a, b)).toBeFalsy();
+      });
     });
   });
-  describe("when angled", () => {
-    const p1 = vec(2, 0, 0);
-    const p2 = vec(0, 2, 0);
-    const p3 = vec(0, 0, 2);
-    const triangle = new Triangle([1, 2, 3], [p1, p2, p3]);
-    const { normal } = triangle;
-    it("should give a normal (4,4,4)", () => {
-      const { x, y, z } = normal;
-      expect(x).toBe(4);
-      expect(y).toBe(4);
-      expect(z).toBe(4);
+  describe("uses", () => {
+    describe("when the triangle contains the index", () => {
+      const tri = triangle([1, 2, 3]);
+      it("should return true", () => expect(uses(tri, 1)).toBeTruthy());
     });
-    const { unitNormal } = triangle;
-    it("should give a unitNormal 1/sqrt(3)(1,1,1)", () => {
-      const value = 1 / Math.sqrt(3);
-      const { x, y, z } = unitNormal;
-      expect(x).toBe(value);
-      expect(y).toBe(value);
-      expect(z).toBe(value);
+    describe("when the triangle does not contain the index", () => {
+      const tri = triangle([1, 2, 3]);
+      it("should return false", () => expect(uses(tri, 4)).toBeFalsy());
     });
   });
 });

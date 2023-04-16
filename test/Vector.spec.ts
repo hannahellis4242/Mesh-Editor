@@ -2,13 +2,13 @@ import Vector, {
   add,
   cross,
   dot,
-  equal,
+  equalVectors as equalVectors,
   negate,
   scale,
   subtract,
   vec,
   zeroVec,
-} from "../src/Mesh/Vector";
+} from "../src/Mesh2/Vector";
 
 describe("Vector", () => {
   describe("when zero vector", () => {
@@ -80,21 +80,21 @@ describe("Vector", () => {
     describe("a vector is always equal to itself", () => {
       const a = vec(1, 2, 3);
       it("should give true", () => {
-        expect(equal(a, a)).toBeTruthy();
+        expect(equalVectors(a, a)).toBeTruthy();
       });
     });
     describe("two different vectors with different values", () => {
       const a = vec(1, 2, 3);
       const b = vec(1, 3, 3);
       it("should give false", () => {
-        expect(equal(a, b)).toBeFalsy();
+        expect(equalVectors(a, b)).toBeFalsy();
       });
     });
     describe("two different vectors with the same value", () => {
       const a = vec(1, 2, 3);
       const b = vec(1, 2, 3);
       it("should give true", () => {
-        expect(equal(a, b)).toBeTruthy();
+        expect(equalVectors(a, b)).toBeTruthy();
       });
     });
   });
