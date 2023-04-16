@@ -1,44 +1,22 @@
-import {
-  addSurfaces,
-  getSurface,
-  removeSurface,
-  replaceSurface,
-} from "../src/Mesh2/Mesh";
+import { getSurface, removeSurface, replaceSurface } from "../src/Mesh2/Mesh";
 import unitMesh from "../src/Mesh2/unitMesh";
 import addVertices from "../src/Mesh2/addVertices";
 import { vec } from "../src/Mesh2/Vector";
+import addSurfaces from "../src/Mesh2/addSurfaces";
 
 describe("Mesh", () => {
   describe("surface operations", () => {
-    describe("adding surfaces", () => {
-      const mesh = addSurfaces(
-        addVertices([
-          vec(-1, -1, 0),
-          vec(1, -1, 1),
-          vec(1, 1, -1),
-          vec(-1, 1, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
-      );
-      it("should have two surfaces", () => {
-        expect(mesh.surfaces).toHaveLength(2);
-      });
-    });
     describe("getting a surface", () => {
       const mesh = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       it("should give the first surface", () => {
         const value = getSurface(mesh, 0);
@@ -53,16 +31,15 @@ describe("Mesh", () => {
     });
     describe("getting a surface that doesn't exist", () => {
       const mesh = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       it("should give the first surface", () => {
         const value = getSurface(mesh, 2);
@@ -71,17 +48,16 @@ describe("Mesh", () => {
     });
     describe("editing a surface", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 2, 4] });
       it("should have two surfaces", () => {
@@ -100,17 +76,16 @@ describe("Mesh", () => {
     });
     describe("editing a surface that doesn't exist", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 5, value: [0, 2, 4] });
       it("should have two surfaces", () => {
@@ -120,17 +95,16 @@ describe("Mesh", () => {
     });
     describe("replacing a surface with a new surface that uses a vertex that doesn't exist", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 5, 4] });
       it("should have two surfaces", () => {
@@ -140,17 +114,16 @@ describe("Mesh", () => {
     });
     describe("replacing a surface with an existing surface", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 1, 2] });
       it("should have two surfaces", () => {
@@ -160,17 +133,16 @@ describe("Mesh", () => {
     });
     describe("remove a surface", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = removeSurface(init, 1);
       it("should have one surface", () => {
@@ -179,17 +151,16 @@ describe("Mesh", () => {
     });
     describe("remove a surface that doesn't exist", () => {
       const init = addSurfaces(
+        [0, 1, 2],
+        [0, 2, 3]
+      )(
         addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
+        ])(unitMesh())
       );
       const mesh = removeSurface(init, 4);
       it("should have two surfaces", () => {

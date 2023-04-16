@@ -10,8 +10,6 @@ export default interface Mesh {
 }
 
 //surface crud
-export const addSurfaces = (mesh: Mesh, indices: Indices[]) =>
-  indices.reduce((acc, x) => addSurface(x)(acc), mesh);
 //read
 export const getSurface = (mesh: Mesh, index: number): Triangle | undefined =>
   mesh.surfaces.at(index);
