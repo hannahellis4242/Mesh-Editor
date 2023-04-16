@@ -7,17 +7,6 @@ export default interface Mesh {
   readonly surfaces: Triangle[];
 }
 
-//delete
-export const removeVertex = (mesh: Mesh, index: number): Mesh => {
-  const found = mesh.vertices.at(index);
-  return found
-    ? buildMesh(
-        mesh.vertices.filter((_, i) => i !== index),
-        mesh.surfaces.filter((tri) => !uses(tri, index))
-      )
-    : mesh;
-};
-
 //surface crud
 const surfaceCanBeAdded = (mesh: Mesh, indices: Indices): boolean => {
   const allExist = indices.every((x) => mesh.vertices.at(x));

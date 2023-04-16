@@ -1,44 +1,16 @@
-import Mesh, {
+import {
   addSurface,
   addSurfaces,
   getSurface,
   removeSurface,
-  removeVertex,
   replaceSurface,
 } from "../src/Mesh2/Mesh";
 import unitMesh from "../src/Mesh2/unitMesh";
-import addVertex from "../src/Mesh2/addVertex";
 import addVertices from "../src/Mesh2/addVertices";
 import { vec } from "../src/Mesh2/Vector";
-import getVertex from "../src/Mesh2/getVertex";
+import removeVertex from "../src/Mesh2/removeVertex";
 
 describe("Mesh", () => {
-  describe("vertex operations", () => {
-    describe("removing an existing vertex from the mesh", () => {
-      const init = addVertex(vec(2, 3, 4))(addVertex(vec(1, 2, 3))(unitMesh()));
-      const mesh = removeVertex(init, 1);
-      it("should now have only one vertex", () =>
-        expect(mesh.vertices).toHaveLength(1));
-    });
-    describe("removing a vertex again", () => {
-      const init = addSurfaces(
-        addVertices([
-          vec(-1, -1, 0),
-          vec(1, -1, 1),
-          vec(1, 1, -1),
-          vec(-1, 1, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
-      );
-      const mesh = removeVertex(init, 3);
-      it("should remove a vertex", () => {
-        expect(mesh.vertices).toHaveLength(3);
-      });
-    });
-  });
   describe("surface operations", () => {
     describe("unit mesh", () => {
       const mesh = unitMesh();
@@ -294,27 +266,7 @@ describe("Mesh", () => {
       it("should still be the same mesh", () => expect(mesh).toBe(init));
     });
   });
-  describe("interaction between vertex and surface operations", () => {
-    describe("removing a vertex", () => {
-      const init = addSurfaces(
-        addVertices([
-          vec(-1, -1, 0),
-          vec(1, -1, 1),
-          vec(1, 1, -1),
-          vec(-1, 1, 0),
-        ])(unitMesh()),
-        [
-          [0, 1, 2],
-          [0, 2, 3],
-        ]
-      );
-      const mesh = removeVertex(init, 3);
-      it("should also remove any surface that uses the vertex", () => {
-        expect(mesh.vertices).toHaveLength(3);
-        expect(mesh.surfaces).toHaveLength(1);
-      });
-    });
-  });
+  describe("interaction between vertex and surface operations", () => {});
   describe("surface normals", () => {
     it("placeholder", () => expect(true).toBeTruthy());
   });
