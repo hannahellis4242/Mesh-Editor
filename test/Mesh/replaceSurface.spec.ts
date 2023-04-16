@@ -1,6 +1,6 @@
 import { vec } from "../../src/Mesh2/Vector";
 import addSurfaces from "../../src/Mesh2/addSurfaces";
-import addVertices from "../../src/Mesh2/addVertices";
+import addVertex from "../../src/Mesh2/addVertex";
 import getSurface from "../../src/Mesh2/getSurface";
 import unitMesh from "../../src/Mesh2/unitMesh";
 import replaceSurface from "../../src/Mesh2/replaceSurface";
@@ -11,7 +11,7 @@ describe("replaceSurface", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
@@ -39,7 +39,7 @@ describe("replaceSurface", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
@@ -58,7 +58,7 @@ describe("replaceSurface", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
@@ -77,7 +77,7 @@ describe("replaceSurface", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),

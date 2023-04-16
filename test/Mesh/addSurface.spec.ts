@@ -1,11 +1,11 @@
 import { vec } from "../../src/Mesh2/Vector";
 import addSurface from "../../src/Mesh2/addSurface";
-import addVertices from "../../src/Mesh2/addVertices";
+import addVertex from "../../src/Mesh2/addVertex";
 import unitMesh from "../../src/Mesh2/unitMesh";
 
 describe("addSurface", () => {
   describe("when adding a surface", () => {
-    const init = addVertices(
+    const init = addVertex(
       vec(5, -4, 0),
       vec(4, 2, 0),
       vec(-1, 5, 0)
@@ -23,7 +23,7 @@ describe("addSurface", () => {
     });
   });
   describe("when adding a surface with and index that doesn't exist", () => {
-    const init = addVertices(
+    const init = addVertex(
       vec(5, -4, 0),
       vec(4, 2, 0),
       vec(-1, 5, 0)
@@ -35,7 +35,7 @@ describe("addSurface", () => {
   });
   describe("when adding a surface that already exists", () => {
     const init = addSurface([0, 1, 2])(
-      addVertices(vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0))(unitMesh())
+      addVertex(vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0))(unitMesh())
     );
     const mesh = addSurface([0, 1, 2])(init);
     it("should have one surface", () => {
@@ -44,7 +44,7 @@ describe("addSurface", () => {
   });
   describe("when adding a surface that already exists but is just a rotation", () => {
     const init = addSurface([0, 1, 2])(
-      addVertices(vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0))(unitMesh())
+      addVertex(vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0))(unitMesh())
     );
     const mesh = addSurface([1, 2, 0])(init);
     it("should have one surface", () => {
@@ -53,7 +53,7 @@ describe("addSurface", () => {
   });
   describe("when adding a new surface", () => {
     const init = addSurface([0, 1, 2])(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),

@@ -1,7 +1,6 @@
 import addSurfaces from "../../src/Mesh2/addSurfaces";
 import { vec } from "../../src/Mesh2/Vector";
 import addVertex from "../../src/Mesh2/addVertex";
-import addVertices from "../../src/Mesh2/addVertices";
 import unitMesh from "../../src/Mesh2/unitMesh";
 import removeVertex from "../../src/Mesh2/removeVertex";
 
@@ -17,7 +16,7 @@ describe("removeVertex", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
@@ -34,7 +33,7 @@ describe("removeVertex", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices(
+      addVertex(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),

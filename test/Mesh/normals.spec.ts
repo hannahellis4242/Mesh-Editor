@@ -1,6 +1,6 @@
 import { equalVectors, vec } from "../../src/Mesh2/Vector";
 import addSurfaces from "../../src/Mesh2/addSurfaces";
-import addVertices from "../../src/Mesh2/addVertices";
+import addVertex from "../../src/Mesh2/addVertex";
 import unitMesh from "../../src/Mesh2/unitMesh";
 import Mesh from "../../src/Mesh2/Mesh";
 import Vector from "../../src/Mesh2/Vector";
@@ -12,7 +12,7 @@ const getNormal =
 describe("normals", () => {
   describe("when getting the normal for a flat surface", () => {
     const mesh = addSurfaces([0, 1, 2])(
-      addVertices(vec(0, 0, 0), vec(1, 0, 0), vec(0, 1, 0))(unitMesh())
+      addVertex(vec(0, 0, 0), vec(1, 0, 0), vec(0, 1, 0))(unitMesh())
     );
     const normal = getNormal(0)(mesh);
     it("should give an existing normal vector", () =>
@@ -28,7 +28,7 @@ describe("normals", () => {
   });
   describe("when getting the normal for a angled surface", () => {
     const mesh = addSurfaces([0, 1, 2])(
-      addVertices(vec(1, 0, 0), vec(0, 1, 0), vec(0, 0, 1))(unitMesh())
+      addVertex(vec(1, 0, 0), vec(0, 1, 0), vec(0, 0, 1))(unitMesh())
     );
     const normal = getNormal(0)(mesh);
     it("should give an existing normal vector", () =>
