@@ -1,15 +1,13 @@
 import Triangle, { Indices, equalTriangles, triangle, uses } from "./Triangle";
 import Vector, { equalVectors } from "./Vector";
 import buildMesh from "./buildMesh";
+import getVertex from "./getVertex";
 
 export default interface Mesh {
   readonly vertices: Vector[];
   readonly surfaces: Triangle[];
 }
 
-//read
-export const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
-  mesh.vertices.at(index);
 //edit
 export interface ReplaceVertex {
   index: number;
@@ -19,7 +17,7 @@ export const replaceVertex = (
   mesh: Mesh,
   { index, value }: ReplaceVertex
 ): Mesh => {
-  const found = getVertex(mesh, index);
+  const found = getVertex(index)(mesh);
   if (!found) {
     return mesh;
   }

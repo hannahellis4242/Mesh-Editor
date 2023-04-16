@@ -2,7 +2,6 @@ import Mesh, {
   addSurface,
   addSurfaces,
   getSurface,
-  getVertex,
   removeSurface,
   removeVertex,
   replaceSurface,
@@ -12,36 +11,17 @@ import unitMesh from "../src/Mesh2/unitMesh";
 import addVertex from "../src/Mesh2/addVertex";
 import addVertices from "../src/Mesh2/addVertices";
 import { vec } from "../src/Mesh2/Vector";
+import getVertex from "../src/Mesh2/getVertex";
 
 describe("Mesh", () => {
   describe("vertex operations", () => {
-    describe("getting a vertex from a mesh", () => {
-      const init = addVertex(vec(1, 2, 3))(unitMesh());
-      it("should find the zeroth entry", () => {
-        const value = getVertex(init, 0);
-        expect(value).toBeDefined();
-        if (value) {
-          const { x, y, z } = value;
-          expect(x).toBe(1);
-          expect(y).toBe(2);
-          expect(z).toBe(3);
-        }
-      });
-    });
-    describe("getting a vertex from a mesh that doesn't exist", () => {
-      const init = addVertex(vec(1, 2, 3))(unitMesh());
-      it("should find the first entry", () => {
-        const value = getVertex(init, 1);
-        expect(value).toBeUndefined();
-      });
-    });
     describe("replacing a vertex", () => {
       const vertex = vec(1, 2, 3);
       const init = addVertex(vertex)(unitMesh());
       it("should have one vertex with a new value", () => {
         const mesh = replaceVertex(init, { index: 0, value: vec(3, 2, 1) });
         expect(mesh.vertices).toHaveLength(1);
-        const value = getVertex(mesh, 0);
+        const value = getVertex(0)(mesh);
         expect(value).toBeDefined();
         if (value) {
           const { x, y, z } = value;
