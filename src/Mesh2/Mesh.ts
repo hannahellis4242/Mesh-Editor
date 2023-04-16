@@ -1,6 +1,8 @@
-import Triangle, { Indices, equalTriangles, triangle, uses } from "./Triangle";
+import Triangle, { Indices, equalTriangles, triangle } from "./Triangle";
 import Vector from "./Vector";
+import addSurface from "./addSurface";
 import buildMesh from "./buildMesh";
+import surfaceCanBeAdded from "./surfaceCanBeAdded";
 
 export default interface Mesh {
   readonly vertices: Vector[];
@@ -8,29 +10,8 @@ export default interface Mesh {
 }
 
 //surface crud
-const surfaceCanBeAdded = (mesh: Mesh, indices: Indices): boolean => {
-  const allExist = indices.every((x) => mesh.vertices.at(x));
-  if (!allExist) {
-    //mesh does not contain all the vertices in indices
-    return false;
-  }
-  const surface = triangle(indices);
-  const found = mesh.surfaces.find((x) => equalTriangles(x, surface));
-  if (found) {
-    //mesh already contains this triangle
-    return false;
-  }
-  return true;
-};
-
-//create
-export const addSurface = (mesh: Mesh, indices: Indices) => {
-  return surfaceCanBeAdded(mesh, indices)
-    ? buildMesh(mesh.vertices, mesh.surfaces.concat(triangle(indices)))
-    : mesh;
-};
 export const addSurfaces = (mesh: Mesh, indices: Indices[]) =>
-  indices.reduce((acc, x) => addSurface(acc, x), mesh);
+  indices.reduce((acc, x) => addSurface(x)(acc), mesh);
 //read
 export const getSurface = (mesh: Mesh, index: number): Triangle | undefined =>
   mesh.surfaces.at(index);
@@ -47,7 +28,7 @@ export const replaceSurface = (
   if (!found) {
     return mesh;
   }
-  return surfaceCanBeAdded(mesh, value)
+  return surfaceCanBeAdded(value)(mesh)
     ? buildMesh(
         mesh.vertices,
         mesh.surfaces.map((v, i) => (i === index ? triangle(value) : v))
