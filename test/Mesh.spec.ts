@@ -5,7 +5,6 @@ import Mesh, {
   removeSurface,
   removeVertex,
   replaceSurface,
-  replaceVertex,
 } from "../src/Mesh2/Mesh";
 import unitMesh from "../src/Mesh2/unitMesh";
 import addVertex from "../src/Mesh2/addVertex";
@@ -15,22 +14,6 @@ import getVertex from "../src/Mesh2/getVertex";
 
 describe("Mesh", () => {
   describe("vertex operations", () => {
-    describe("replacing a vertex", () => {
-      const vertex = vec(1, 2, 3);
-      const init = addVertex(vertex)(unitMesh());
-      it("should have one vertex with a new value", () => {
-        const mesh = replaceVertex(init, { index: 0, value: vec(3, 2, 1) });
-        expect(mesh.vertices).toHaveLength(1);
-        const value = getVertex(0)(mesh);
-        expect(value).toBeDefined();
-        if (value) {
-          const { x, y, z } = value;
-          expect(x).toBe(3);
-          expect(y).toBe(2);
-          expect(z).toBe(1);
-        }
-      });
-    });
     describe("removing an existing vertex from the mesh", () => {
       const init = addVertex(vec(2, 3, 4))(addVertex(vec(1, 2, 3))(unitMesh()));
       const mesh = removeVertex(init, 1);
