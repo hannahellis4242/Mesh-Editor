@@ -1,14 +1,9 @@
-import { equalVectors, vec } from "../../src/Mesh2/Vector";
+import { vec } from "../../src/Mesh2/Vector";
 import addSurface from "../../src/Mesh2/addSurface";
 import addVertex from "../../src/Mesh2/addVertex";
 import unitMesh from "../../src/Mesh2/unitMesh";
-import Mesh from "../../src/Mesh2/Mesh";
-import Vector from "../../src/Mesh2/Vector";
+import getNormal from "../../src/Mesh2/getNormal";
 
-const getNormal =
-  (index: number) =>
-  (mesh: Mesh): Vector | undefined =>
-    mesh.normals.at(index);
 describe("normals", () => {
   describe("when getting the normal for a flat surface", () => {
     const mesh = addSurface([0, 1, 2])(
