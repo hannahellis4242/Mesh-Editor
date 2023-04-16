@@ -7,21 +7,16 @@ import Mesh, {
   removeVertex,
   replaceSurface,
   replaceVertex,
-  unit,
 } from "../src/Mesh2/Mesh";
+import unitMesh from "../src/Mesh2/unitMesh";
 import addVertex from "../src/Mesh2/addVertex";
 import addVertices from "../src/Mesh2/addVertices";
 import { vec } from "../src/Mesh2/Vector";
 
 describe("Mesh", () => {
   describe("vertex operations", () => {
-    describe("unit mesh", () => {
-      const init = unit();
-      it("should have no vertices", () =>
-        expect(init.vertices).toHaveLength(0));
-    });
     describe("getting a vertex from a mesh", () => {
-      const init = addVertex(vec(1, 2, 3))(unit());
+      const init = addVertex(vec(1, 2, 3))(unitMesh());
       it("should find the zeroth entry", () => {
         const value = getVertex(init, 0);
         expect(value).toBeDefined();
@@ -34,7 +29,7 @@ describe("Mesh", () => {
       });
     });
     describe("getting a vertex from a mesh that doesn't exist", () => {
-      const init = addVertex(vec(1, 2, 3))(unit());
+      const init = addVertex(vec(1, 2, 3))(unitMesh());
       it("should find the first entry", () => {
         const value = getVertex(init, 1);
         expect(value).toBeUndefined();
@@ -42,7 +37,7 @@ describe("Mesh", () => {
     });
     describe("replacing a vertex", () => {
       const vertex = vec(1, 2, 3);
-      const init = addVertex(vertex)(unit());
+      const init = addVertex(vertex)(unitMesh());
       it("should have one vertex with a new value", () => {
         const mesh = replaceVertex(init, { index: 0, value: vec(3, 2, 1) });
         expect(mesh.vertices).toHaveLength(1);
@@ -57,7 +52,7 @@ describe("Mesh", () => {
       });
     });
     describe("removing an existing vertex from the mesh", () => {
-      const init = addVertex(vec(2, 3, 4))(addVertex(vec(1, 2, 3))(unit()));
+      const init = addVertex(vec(2, 3, 4))(addVertex(vec(1, 2, 3))(unitMesh()));
       const mesh = removeVertex(init, 1);
       it("should now have only one vertex", () =>
         expect(mesh.vertices).toHaveLength(1));
@@ -69,7 +64,7 @@ describe("Mesh", () => {
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -83,14 +78,14 @@ describe("Mesh", () => {
   });
   describe("surface operations", () => {
     describe("unit mesh", () => {
-      const mesh = unit();
+      const mesh = unitMesh();
       it("should have no surfaces", () => {
         expect(mesh.surfaces).toHaveLength(0);
       });
     });
     describe("when adding a surface", () => {
       const init = addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(
-        unit()
+        unitMesh()
       );
       const mesh = addSurface(init, [0, 1, 2]);
       it("should have one surface", () => {
@@ -106,7 +101,7 @@ describe("Mesh", () => {
     });
     describe("when adding a surface with and index that doesn't exist", () => {
       const init = addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(
-        unit()
+        unitMesh()
       );
       const mesh = addSurface(init, [0, 1, 3]);
       it("should have no surfaces", () => {
@@ -115,7 +110,7 @@ describe("Mesh", () => {
     });
     describe("when adding a surface that already exists", () => {
       const init = addSurface(
-        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unit()),
+        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unitMesh()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [0, 1, 2]);
@@ -125,7 +120,7 @@ describe("Mesh", () => {
     });
     describe("when adding a surface that already exists but is just a rotation", () => {
       const init = addSurface(
-        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unit()),
+        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unitMesh()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [1, 2, 0]);
@@ -140,7 +135,7 @@ describe("Mesh", () => {
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [0, 2, 3]);
@@ -155,7 +150,7 @@ describe("Mesh", () => {
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -173,7 +168,7 @@ describe("Mesh", () => {
             vec(1, -1, 1),
             vec(1, 1, -1),
             vec(-1, 1, 0),
-          ])(unit()),
+          ])(unitMesh()),
           [0, 1, 2]
         ),
         [0, 2, 3]
@@ -197,7 +192,7 @@ describe("Mesh", () => {
             vec(1, -1, 1),
             vec(1, 1, -1),
             vec(-1, 1, 0),
-          ])(unit()),
+          ])(unitMesh()),
           [0, 1, 2]
         ),
         [0, 2, 3]
@@ -215,7 +210,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -244,7 +239,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -264,7 +259,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -284,7 +279,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -304,7 +299,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -323,7 +318,7 @@ describe("Mesh", () => {
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -344,7 +339,7 @@ describe("Mesh", () => {
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ])(unit()),
+        ])(unitMesh()),
         [
           [0, 1, 2],
           [0, 2, 3],

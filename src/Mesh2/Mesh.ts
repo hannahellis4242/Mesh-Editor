@@ -7,10 +7,6 @@ export default interface Mesh {
   readonly surfaces: Triangle[];
 }
 
-export const unit = (): Mesh => ({
-  vertices: [],
-  surfaces: [],
-});
 //read
 export const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
   mesh.vertices.at(index);

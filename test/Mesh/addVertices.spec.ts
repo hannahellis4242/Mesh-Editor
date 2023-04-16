@@ -1,4 +1,4 @@
-import { unit } from "../../src/Mesh2/Mesh";
+import unitMesh from "../../src/Mesh2/unitMesh";
 import { vec } from "../../src/Mesh2/Vector";
 import addVertices from "../../src/Mesh2/addVertices";
 
@@ -10,7 +10,7 @@ describe("addVertices", () => {
       vec(3, 4, 5),
       vec(1, 2, 3),
       vec(4, 5, 6),
-    ])(unit());
+    ])(unitMesh());
     it("should have 4 vertices", () => {
       expect(mesh.vertices).toHaveLength(4);
     });
