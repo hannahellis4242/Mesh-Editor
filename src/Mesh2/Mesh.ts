@@ -10,9 +10,7 @@ export default interface Mesh {
 }
 
 //surface crud
-//read
-export const getSurface = (mesh: Mesh, index: number): Triangle | undefined =>
-  mesh.surfaces.at(index);
+
 //update
 export interface ReplaceSurface {
   index: number;
