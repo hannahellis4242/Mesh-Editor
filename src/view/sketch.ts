@@ -1,6 +1,6 @@
 import p5 from "p5";
 import Colour, { colours } from "../Mesh/Colour";
-import Mesh from "../Mesh/Mesh";
+import Mesh from "../Mesh2/Mesh";
 import Config from "./Config";
 import drawAxes from "./drawAxes";
 import drawMesh from "./drawMesh";

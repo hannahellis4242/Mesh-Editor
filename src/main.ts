@@ -1,23 +1,33 @@
 import p5 from "p5";
 import Colour, { colours } from "./Mesh/Colour";
-import Mesh from "./Mesh/Mesh";
+import Mesh from "./Mesh2/Mesh";
 import { vec } from "./Mesh/Vector";
 import sketch from "./view/sketch";
+import addSurface from "./Mesh2/addSurface";
+import addVertex from "./Mesh2/addVertex";
+import unitMesh from "./Mesh2/unitMesh";
+import removeSurface from "./Mesh2/removeSurface";
+import removeVertex from "./Mesh2/removeVertex";
 
-const mesh = new Mesh();
-{
-  const p0 = mesh.addVertex(vec(-100, -100, 0));
-  const p1 = mesh.addVertex(vec(100, -100, 0));
-  const p2 = mesh.addVertex(vec(100, 100, 0));
-  const p3 = mesh.addVertex(vec(-100, 100, 0));
-  const p4 = mesh.addVertex(vec(0, 0, 100));
-  mesh.addTrangle([p0, p3, p1]);
-  mesh.addTrangle([p1, p3, p2]);
-  mesh.addTrangle([p0, p1, p4]);
-  mesh.addTrangle([p3, p0, p4]);
-  mesh.addTrangle([p2, p3, p4]);
-  mesh.addTrangle([p1, p2, p4]);
-}
+let mesh = unitMesh();
+const initMesh = (mesh: Mesh): Mesh =>
+  addSurface(
+    [0, 3, 1],
+    [1, 3, 2],
+    [0, 1, 4],
+    [3, 0, 4],
+    [2, 3, 4],
+    [1, 2, 4]
+  )(
+    addVertex(
+      vec(-100, -100, 0),
+      vec(100, -100, 0),
+      vec(100, 100, 0),
+      vec(-100, 100, 0),
+      vec(0, 0, 100)
+    )(mesh)
+  );
+mesh = initMesh(mesh);
 
 const config = {
   fill: colours.blue,
@@ -25,7 +35,14 @@ const config = {
   normals: { colour: new Colour(128, 128, 128), weight: 5, size: 20 },
   vertices: { colour: colours.red, size: 5 },
 };
-new p5(sketch({ rotate: false, axes: true })(config, mesh));
+let drawing = new p5(sketch({ rotate: false, axes: true })(config, mesh));
+
+const refresh = (newMesh: Mesh) => {
+  mesh = newMesh;
+  drawing.remove();
+  drawing = new p5(sketch({ rotate: false, axes: true })(config, mesh));
+  drawTables(mesh);
+};
 
 const createRowButtons = (row: HTMLTableRowElement, rm: () => void) => {
   {
@@ -81,7 +98,9 @@ const drawTables = (mesh: Mesh) => {
         data.innerText = z.toString();
         row.appendChild(data);
       }
-      createRowButtons(row, () => {});
+      createRowButtons(row, () => {
+        refresh(removeVertex(index)(mesh));
+      });
       vertexTable.appendChild(row);
     });
   }
@@ -103,8 +122,7 @@ const drawTables = (mesh: Mesh) => {
         row.appendChild(data);
       });
       createRowButtons(row, () => {
-        mesh.removeTriangle(index);
-        drawTables(mesh);
+        refresh(removeSurface(index)(mesh));
       });
       triangleTable.appendChild(row);
     });
