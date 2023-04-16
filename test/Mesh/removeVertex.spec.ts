@@ -17,12 +17,12 @@ describe("removeVertex", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices([
+      addVertices(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
-        vec(-1, 1, 0),
-      ])(unitMesh())
+        vec(-1, 1, 0)
+      )(unitMesh())
     );
     const mesh = removeVertex(3)(init);
     it("should remove a vertex", () => {
@@ -34,12 +34,12 @@ describe("removeVertex", () => {
       [0, 1, 2],
       [0, 2, 3]
     )(
-      addVertices([
+      addVertices(
         vec(-1, -1, 0),
         vec(1, -1, 1),
         vec(1, 1, -1),
-        vec(-1, 1, 0),
-      ])(unitMesh())
+        vec(-1, 1, 0)
+      )(unitMesh())
     );
     const mesh = removeVertex(3)(init);
     it("should also remove any surface that uses the vertex", () => {

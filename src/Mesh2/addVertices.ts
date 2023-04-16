@@ -3,7 +3,7 @@ import Vector from "./Vector";
 import addVertex from "./addVertex";
 
 const addVertices =
-  (vertices: Vector[]) =>
+  (...vertices: Vector[]) =>
   (mesh: Mesh): Mesh =>
     vertices.reduce((acc, v) => addVertex(v)(acc), mesh);
 

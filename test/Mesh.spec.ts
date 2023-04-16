@@ -11,12 +11,12 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
-          vec(-1, 1, 0),
-        ])(unitMesh())
+          vec(-1, 1, 0)
+        )(unitMesh())
       );
       it("should give the first surface", () => {
         const value = getSurface(mesh, 0);
@@ -34,12 +34,12 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
-          vec(-1, 1, 0),
-        ])(unitMesh())
+          vec(-1, 1, 0)
+        )(unitMesh())
       );
       it("should give the first surface", () => {
         const value = getSurface(mesh, 2);
@@ -51,13 +51,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 2, 4] });
       it("should have two surfaces", () => {
@@ -79,13 +79,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 5, value: [0, 2, 4] });
       it("should have two surfaces", () => {
@@ -98,13 +98,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 5, 4] });
       it("should have two surfaces", () => {
@@ -117,13 +117,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = replaceSurface(init, { index: 1, value: [0, 1, 2] });
       it("should have two surfaces", () => {
@@ -136,13 +136,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = removeSurface(init, 1);
       it("should have one surface", () => {
@@ -154,13 +154,13 @@ describe("Mesh", () => {
         [0, 1, 2],
         [0, 2, 3]
       )(
-        addVertices([
+        addVertices(
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-          vec(0, 2, 0),
-        ])(unitMesh())
+          vec(0, 2, 0)
+        )(unitMesh())
       );
       const mesh = removeSurface(init, 4);
       it("should have two surfaces", () => {
