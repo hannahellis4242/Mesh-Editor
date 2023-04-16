@@ -1,4 +1,4 @@
-import { show, vec } from "../../src/Mesh2/Vector";
+import { vec } from "../../src/Mesh2/Vector";
 import calculateNormal from "../../src/Mesh2/calculateNormal";
 describe("calculateNormal", () => {
   it.each([
