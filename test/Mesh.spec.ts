@@ -1,8 +1,6 @@
 import Mesh, {
   addSurface,
   addSurfaces,
-  addVertex,
-  addVertices,
   getSurface,
   getVertex,
   removeSurface,
@@ -11,6 +9,8 @@ import Mesh, {
   replaceVertex,
   unit,
 } from "../src/Mesh2/Mesh";
+import addVertex from "../src/Mesh2/addVertex";
+import addVertices from "../src/Mesh2/addVertices";
 import { vec } from "../src/Mesh2/Vector";
 
 describe("Mesh", () => {
@@ -22,7 +22,7 @@ describe("Mesh", () => {
     });
     describe("when adding a vertex to a unit mesh", () => {
       const init = unit();
-      const mesh = addVertex(init, vec(1, 2, 3));
+      const mesh = addVertex(vec(1, 2, 3))(init);
       it("should have one vertex", () => expect(mesh.vertices).toHaveLength(1));
       it("and it should have the same value as the vertex added", () => {
         const [vertex] = mesh.vertices;
@@ -33,8 +33,8 @@ describe("Mesh", () => {
       });
     });
     describe("adding two different vertices to a unit mesh", () => {
-      const init = addVertex(unit(), vec(1, 2, 3));
-      const mesh = addVertex(init, vec(2, 4, 9));
+      const init = addVertex(vec(1, 2, 3))(unit());
+      const mesh = addVertex(vec(2, 4, 9))(init);
       it("should have two vertices", () =>
         expect(mesh.vertices).toHaveLength(2));
       it("and it should contain the same value as the vertex added", () => {
@@ -45,24 +45,24 @@ describe("Mesh", () => {
       });
     });
     describe("adding a second vertex that is the same as the first", () => {
-      const init = addVertex(unit(), vec(1, 2, 3));
-      const mesh = addVertex(init, vec(1, 2, 3));
+      const init = addVertex(vec(1, 2, 3))(unit());
+      const mesh = addVertex(vec(1, 2, 3))(init);
       it("should have one vertex", () => expect(mesh.vertices).toHaveLength(1));
     });
     describe("adding mulitple verctices to the mesh", () => {
-      const mesh = addVertices(unit(), [
+      const mesh = addVertices([
         vec(1, 2, 3),
         vec(2, 3, 4),
         vec(3, 4, 5),
         vec(1, 2, 3),
         vec(4, 5, 6),
-      ]);
+      ])(unit());
       it("should have 4 vertices", () => {
         expect(mesh.vertices).toHaveLength(4);
       });
     });
     describe("getting a vertex from a mesh", () => {
-      const init = addVertex(unit(), vec(1, 2, 3));
+      const init = addVertex(vec(1, 2, 3))(unit());
       it("should find the zeroth entry", () => {
         const value = getVertex(init, 0);
         expect(value).toBeDefined();
@@ -75,7 +75,7 @@ describe("Mesh", () => {
       });
     });
     describe("getting a vertex from a mesh that doesn't exist", () => {
-      const init = addVertex(unit(), vec(1, 2, 3));
+      const init = addVertex(vec(1, 2, 3))(unit());
       it("should find the first entry", () => {
         const value = getVertex(init, 1);
         expect(value).toBeUndefined();
@@ -83,7 +83,7 @@ describe("Mesh", () => {
     });
     describe("replacing a vertex", () => {
       const vertex = vec(1, 2, 3);
-      const init = addVertex(unit(), vertex);
+      const init = addVertex(vertex)(unit());
       it("should have one vertex with a new value", () => {
         const mesh = replaceVertex(init, { index: 0, value: vec(3, 2, 1) });
         expect(mesh.vertices).toHaveLength(1);
@@ -98,19 +98,19 @@ describe("Mesh", () => {
       });
     });
     describe("removing an existing vertex from the mesh", () => {
-      const init = addVertex(addVertex(unit(), vec(1, 2, 3)), vec(2, 3, 4));
+      const init = addVertex(vec(2, 3, 4))(addVertex(vec(1, 2, 3))(unit()));
       const mesh = removeVertex(init, 1);
       it("should now have only one vertex", () =>
         expect(mesh.vertices).toHaveLength(1));
     });
     describe("removing a vertex again", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -130,11 +130,9 @@ describe("Mesh", () => {
       });
     });
     describe("when adding a surface", () => {
-      const init = addVertices(unit(), [
-        vec(5, -4, 0),
-        vec(4, 2, 0),
-        vec(-1, 5, 0),
-      ]);
+      const init = addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(
+        unit()
+      );
       const mesh = addSurface(init, [0, 1, 2]);
       it("should have one surface", () => {
         expect(mesh.surfaces).toHaveLength(1);
@@ -148,11 +146,9 @@ describe("Mesh", () => {
       });
     });
     describe("when adding a surface with and index that doesn't exist", () => {
-      const init = addVertices(unit(), [
-        vec(5, -4, 0),
-        vec(4, 2, 0),
-        vec(-1, 5, 0),
-      ]);
+      const init = addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(
+        unit()
+      );
       const mesh = addSurface(init, [0, 1, 3]);
       it("should have no surfaces", () => {
         expect(mesh.surfaces).toHaveLength(0);
@@ -160,7 +156,7 @@ describe("Mesh", () => {
     });
     describe("when adding a surface that already exists", () => {
       const init = addSurface(
-        addVertices(unit(), [vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)]),
+        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unit()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [0, 1, 2]);
@@ -170,7 +166,7 @@ describe("Mesh", () => {
     });
     describe("when adding a surface that already exists but is just a rotation", () => {
       const init = addSurface(
-        addVertices(unit(), [vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)]),
+        addVertices([vec(5, -4, 0), vec(4, 2, 0), vec(-1, 5, 0)])(unit()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [1, 2, 0]);
@@ -180,12 +176,12 @@ describe("Mesh", () => {
     });
     describe("when adding a new surface", () => {
       const init = addSurface(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ]),
+        ])(unit()),
         [0, 1, 2]
       );
       const mesh = addSurface(init, [0, 2, 3]);
@@ -195,12 +191,12 @@ describe("Mesh", () => {
     });
     describe("adding surfaces", () => {
       const mesh = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -213,12 +209,12 @@ describe("Mesh", () => {
     describe("getting a surface", () => {
       const mesh = addSurface(
         addSurface(
-          addVertices(unit(), [
+          addVertices([
             vec(-1, -1, 0),
             vec(1, -1, 1),
             vec(1, 1, -1),
             vec(-1, 1, 0),
-          ]),
+          ])(unit()),
           [0, 1, 2]
         ),
         [0, 2, 3]
@@ -237,12 +233,12 @@ describe("Mesh", () => {
     describe("getting a surface that doesn't exist", () => {
       const mesh = addSurface(
         addSurface(
-          addVertices(unit(), [
+          addVertices([
             vec(-1, -1, 0),
             vec(1, -1, 1),
             vec(1, 1, -1),
             vec(-1, 1, 0),
-          ]),
+          ])(unit()),
           [0, 1, 2]
         ),
         [0, 2, 3]
@@ -254,13 +250,13 @@ describe("Mesh", () => {
     });
     describe("editing a surface", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -283,13 +279,13 @@ describe("Mesh", () => {
     });
     describe("editing a surface that doesn't exist", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -303,13 +299,13 @@ describe("Mesh", () => {
     });
     describe("replacing a surface with a new surface that uses a vertex that doesn't exist", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -323,13 +319,13 @@ describe("Mesh", () => {
     });
     describe("replacing a surface with an existing surface", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -343,13 +339,13 @@ describe("Mesh", () => {
     });
     describe("remove a surface", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -362,13 +358,13 @@ describe("Mesh", () => {
     });
     describe("remove a surface that doesn't exist", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
           vec(0, 2, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],
@@ -384,12 +380,12 @@ describe("Mesh", () => {
   describe("interaction between vertex and surface operations", () => {
     describe("removing a vertex", () => {
       const init = addSurfaces(
-        addVertices(unit(), [
+        addVertices([
           vec(-1, -1, 0),
           vec(1, -1, 1),
           vec(1, 1, -1),
           vec(-1, 1, 0),
-        ]),
+        ])(unit()),
         [
           [0, 1, 2],
           [0, 2, 3],

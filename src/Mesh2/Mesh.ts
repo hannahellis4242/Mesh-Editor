@@ -1,5 +1,6 @@
 import Triangle, { Indices, equalTriangles, triangle, uses } from "./Triangle";
 import Vector, { equalVectors } from "./Vector";
+import buildMesh from "./buildMesh";
 
 export default interface Mesh {
   readonly vertices: Vector[];
@@ -10,20 +11,6 @@ export const unit = (): Mesh => ({
   vertices: [],
   surfaces: [],
 });
-
-export const build = (vertices: Vector[], surfaces: Triangle[]): Mesh => ({
-  vertices,
-  surfaces,
-});
-
-//vertex crud
-//create
-export const addVertex = (mesh: Mesh, vertex: Vector): Mesh => {
-  const found = mesh.vertices.find((v) => equalVectors(v, vertex));
-  return found ? mesh : build(mesh.vertices.concat(vertex), mesh.surfaces);
-};
-export const addVertices = (mesh: Mesh, vertices: Vector[]): Mesh =>
-  vertices.reduce((acc, v) => addVertex(acc, v), mesh);
 //read
 export const getVertex = (mesh: Mesh, index: number): Vector | undefined =>
   mesh.vertices.at(index);
@@ -40,7 +27,7 @@ export const replaceVertex = (
   if (!found) {
     return mesh;
   }
-  return build(
+  return buildMesh(
     mesh.vertices.map((v, i) => (i === index ? value : v)),
     mesh.surfaces
   );
@@ -49,7 +36,7 @@ export const replaceVertex = (
 export const removeVertex = (mesh: Mesh, index: number): Mesh => {
   const found = mesh.vertices.at(index);
   return found
-    ? build(
+    ? buildMesh(
         mesh.vertices.filter((_, i) => i !== index),
         mesh.surfaces.filter((tri) => !uses(tri, index))
       )
@@ -75,7 +62,7 @@ const surfaceCanBeAdded = (mesh: Mesh, indices: Indices): boolean => {
 //create
 export const addSurface = (mesh: Mesh, indices: Indices) => {
   return surfaceCanBeAdded(mesh, indices)
-    ? build(mesh.vertices, mesh.surfaces.concat(triangle(indices)))
+    ? buildMesh(mesh.vertices, mesh.surfaces.concat(triangle(indices)))
     : mesh;
 };
 export const addSurfaces = (mesh: Mesh, indices: Indices[]) =>
@@ -97,7 +84,7 @@ export const replaceSurface = (
     return mesh;
   }
   return surfaceCanBeAdded(mesh, value)
-    ? build(
+    ? buildMesh(
         mesh.vertices,
         mesh.surfaces.map((v, i) => (i === index ? triangle(value) : v))
       )
@@ -109,7 +96,7 @@ export const removeSurface = (mesh: Mesh, index: number): Mesh => {
   if (!found) {
     return mesh;
   }
-  return build(
+  return buildMesh(
     mesh.vertices,
     mesh.surfaces.filter((_, i) => i !== index)
   );
